@@ -7,6 +7,8 @@ class MariaLogic : QApplication {
 private:
 	MariaUI *mariaUI;
 
+protected:
+
 public:
 	MariaLogic(int argc, char *argv[]);
 	~MariaLogic(void);
