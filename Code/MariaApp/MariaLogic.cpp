@@ -1,7 +1,7 @@
 #include "MariaLogic.h"
 
 MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
-	mariaUI = new MariaUI();
+	mariaUI = new MariaUI(this);
 	
 	mariaUI->setState(MariaUI::INTRO);
 	mariaIntepreter = new MariaInterpreter();

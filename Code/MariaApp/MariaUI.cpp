@@ -1,7 +1,10 @@
 #include "MariaUI.h"
+#include <QkeyEvent>
 
-MariaUI::MariaUI(QWidget *parent) : QMainWindow(parent)
+MariaUI::MariaUI(MariaLogic *mariaLogic, QWidget *parent) : QMainWindow(parent)
 {
+	this->mariaLogic = mariaLogic;
+
 	initState();
 	initImages();
 	initWindowTitle();
@@ -12,7 +15,6 @@ MariaUI::MariaUI(QWidget *parent) : QMainWindow(parent)
 
 	show();
 }
-
 MariaUI::~MariaUI(void) {
 	delete _mariaUILoading;
 	delete _statusAnimationTimer;
@@ -223,6 +225,14 @@ void MariaUI::setInternalState() {
 
 	if(!_statePreAnimationTimer->isActive())
 		_statePreAnimationTimer->start(1);
+}
+
+void MariaUI::keyReleaseEvent(QKeyEvent* keyevent){
+	if(keyevent->key() == Qt::Key_Enter){
+		//todo: process command
+	}else{
+		//todo: tick / question if keyword detected
+	}
 }
 
 void MariaUI::updateGUI() {

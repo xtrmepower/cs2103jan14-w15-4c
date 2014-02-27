@@ -18,6 +18,7 @@
 
 #define AMOUNT_OF_IMAGES 10
 
+class MariaLogic;
 class MariaUI : QMainWindow {
 	 Q_OBJECT
 public:
@@ -48,6 +49,8 @@ private:
 	MariaUILoading *_mariaUILoading;
 	QString _backgroundColor;
 
+	MariaLogic *mariaLogic;
+
 	//Load images used in application.
 	void initState();
 	void initImages();
@@ -68,8 +71,10 @@ protected:
 
 public:
 
-	MariaUI(QWidget *parent=0);
+	MariaUI(MariaLogic *mariaLogic, QWidget *parent=0);
 	~MariaUI(void);
+
+	void keyReleaseEvent(QKeyEvent* keyevent);
 
 	//Force UI Class to update values prematurelly.
 	void updateGUI();
