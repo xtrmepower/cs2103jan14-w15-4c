@@ -8,3 +8,11 @@ MariaInterpreter::MariaInterpreter(map<string, CommandType> *inputCommandList){
 
 MariaInterpreter::~MariaInterpreter(void){
 }
+
+void MariaInterpreter::setApple(int a){
+	apple = a;
+}
+
+int MariaInterpreter::getApple() {
+	return apple;
+}
