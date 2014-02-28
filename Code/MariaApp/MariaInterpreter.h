@@ -32,7 +32,6 @@ public:
 	CommandType getCommandType(string &inputString);
 
 	// Same as above, but hoping it works better with regex.
-	// WARNING: Not working yet...
 	CommandType getCommandTypeRegex(string &inputString);
 
 private:
@@ -49,7 +48,7 @@ private:
 	vector<string> tokenizeString(string inputString);
 
 	// To trim whitespace.
-	inline string trimWhiteSpaceLeft(string &text);
-	inline string trimWhiteSpaceRight(string &text);
-	inline string trimWhiteSpace(string &text);
+	inline string trimWhiteSpaceLeft(string text);
+	inline string trimWhiteSpaceRight(string text);
+	inline string trimWhiteSpace(string text);
 };
