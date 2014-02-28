@@ -36,7 +36,7 @@ MariaInterpreter::CommandType MariaInterpreter::getCommandType(string &inputStri
 		command = Quit;
 	}
 
-	trimWhiteSpace(inputString);
+	inputString = trimWhiteSpace(inputString);
 
 	return command;
 }
@@ -68,7 +68,7 @@ MariaInterpreter::CommandType MariaInterpreter::getCommandTypeRegex(string &inpu
 		command = Quit;
 	}
 
-	trimWhiteSpace(inputString);
+	inputString = trimWhiteSpace(inputString);
 
 	return command;
 }
@@ -93,16 +93,16 @@ vector<string> MariaInterpreter::tokenizeString(string inputString) {
 	return token;
 }
 
-string MariaInterpreter::trimWhiteSpaceLeft(string &text) {
+string MariaInterpreter::trimWhiteSpaceLeft(string text) {
 	text.erase(text.begin(), find_if(text.begin(), text.end(), not1(ptr_fun<int, int>(isspace))));
 	return text;
 }
 
-string MariaInterpreter::trimWhiteSpaceRight(string &text) {
+string MariaInterpreter::trimWhiteSpaceRight(string text) {
 	text.erase(find_if(text.rbegin(), text.rend(), not1(ptr_fun<int, int>(isspace))).base(), text.end());
 	return text;
 }
 
-string MariaInterpreter::trimWhiteSpace(string &text) {
+string MariaInterpreter::trimWhiteSpace(string text) {
 	return trimWhiteSpaceLeft(trimWhiteSpaceRight(text));
 }
