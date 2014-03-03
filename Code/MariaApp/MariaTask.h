@@ -2,7 +2,7 @@
 
 #include <string>
 #include <QtCore/QCoreApplication>
-
+#include "MariaTime.h"
 using namespace std;
 
 class MariaTask{
@@ -13,21 +13,23 @@ public:
 		TIMED
 	} TaskType;
 	
-	MariaTask(string title, time_t start, time_t end);
-	MariaTask(string title, string description,time_t start, time_t end);
+	MariaTask(string title, MariaTime start, MariaTime end);
+	MariaTask(string title, string description,MariaTime start, MariaTime end);
 	~MariaTask();
 	
 	
 	TaskType getType();
 	string getTitle();
 	string getDescription();
-	time_t getStart();
-	time_t getEnd();
+	MariaTime getStart();
+	MariaTime getEnd();
+	double getDuration();
+	
 
 private:
 	TaskType	type;
 	string		title;
 	string		description;
-	time_t		start;
-	time_t		end;
+	MariaTime		start;
+	MariaTime		end;
 };

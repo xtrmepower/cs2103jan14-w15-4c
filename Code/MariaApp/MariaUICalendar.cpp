@@ -202,7 +202,7 @@ void MariaUICalendar::createUI(VIEW_TYPE type) {
 
 void MariaUICalendar::addDisplay(MariaTask task) {
 
-	displayPack* newDisplay=new displayPack(_parent,QString(task.getTitle().c_str()),task.getType(),task.getStart(),task.getEnd());
+	displayPack* newDisplay=new displayPack(_parent,QString(task.getTitle().c_str()),task.getType(),task.getStart().getUnixTime(),task.getEnd().getUnixTime());
 	newDisplay->setDestinationX(-_parent->width()*0.5+30);
 	newDisplay->setDestinationY(-20+(int)_queuedisplayQueue.size()*14);
 	newDisplay->setRealX(_parent->width()*0.5+10+(int)_queuedisplayQueue.size()*10);

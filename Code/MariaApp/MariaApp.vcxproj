@@ -167,6 +167,7 @@
     <ClCompile Include="MariaLogic.cpp" />
     <ClCompile Include="MariaTask.cpp" />
     <ClCompile Include="MariaTaskManager.cpp" />
+    <ClCompile Include="MariaTime.cpp" />
     <ClCompile Include="MariaUI.cpp" />
     <ClCompile Include="MariaUICalendar.cpp" />
     <ClCompile Include="MariaUILoading.cpp" />
@@ -225,6 +226,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </Command>
     </CustomBuild>
+    <ClInclude Include="MariaTime.h" />
     <ClInclude Include="MariaUISetting.h" />
     <CustomBuild Include="MariaUIRolling.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
