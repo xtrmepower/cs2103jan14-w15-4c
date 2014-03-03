@@ -15,7 +15,7 @@ public:
 
 private:
 	MariaUI				*mariaUI;
-	MariaInterpreter	*mariaIntepreter;
+	MariaInterpreter	*mariaInterpreter;
 	MariaTaskManager	*mariaTaskManager;
 	MariaFileWriter		*mariaFileWriter;
 
