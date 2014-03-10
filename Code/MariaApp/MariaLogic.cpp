@@ -3,13 +3,21 @@
 
 MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	mariaInterpreter = new MariaInterpreter();
-	mariaTaskManager = new MariaTaskManager();
 	mariaFileManager = new MariaFileManager();
+	mariaTaskManager = new MariaTaskManager(mariaFileManager->openFile());
 	mariaUI = new MariaUI(this,mariaTaskManager);
 
 	mariaUI->setState(MariaUI::INTRO);
 	mariaUI->getLoading()->setDisplayText("Loading");
+
 	//Put loading intensive stuffs in-between changing state to intro and to other state.
+	try{
+		//mariaTaskManager = new MariaTaskManager(/*mariaFileManager->openFile()*/);
+	}catch(exception& e){
+		//todo: prompt user, file cannot be written!
+		//mariaTaskManager = new MariaTaskManager();
+	}
+	
 	mariaUI->setState(MariaUI::HOME);
 
 
@@ -50,6 +58,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			std::string taskTitle = mariaInterpreter->getTitle(inputText);
 			if(mariaTaskManager->addTask(taskTitle, NULL, NULL)){
 				mariaUI->getTextbox()->setQuestionText("Task '"+ taskTitle +"' has been added!");
+				mariaFileManager->writeFile(mariaTaskManager->findTask(""));
 			} else {
 				mariaUI->getTextbox()->setQuestionText("There is problem adding '"+ inputText + "'");
 			}
