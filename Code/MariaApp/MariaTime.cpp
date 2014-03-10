@@ -68,6 +68,36 @@ int MariaTime::getSec(){
 	return timeStruct.tm_sec;
 }
 
+void MariaTime::setYear(int year){
+	timeStruct.tm_year = year - YEAR_OFFSET;
+	timeStamp = mktime(&timeStruct);
+}
+
+void MariaTime::setMonth(int month){
+	timeStruct.tm_mon = month - MONTH_OFFSET;
+	timeStamp = mktime(&timeStruct);
+}
+
+void MariaTime::setDay(int day){
+	timeStruct.tm_mday = day;
+	timeStamp = mktime(&timeStruct);
+}
+
+void MariaTime::setHour(int hour){
+	timeStruct.tm_hour = hour;
+	timeStamp = mktime(&timeStruct);
+}
+
+void MariaTime::setMin(int min){
+	timeStruct.tm_min = min;
+	timeStamp = mktime(&timeStruct);
+}
+
+void MariaTime::setSec(int sec){
+	timeStruct.tm_sec = sec;
+	timeStamp = mktime(&timeStruct);
+}
+
 MariaTime MariaTime::getCurrentTime() {
 	MariaTime toReturn;
 	time_t rawtime;
@@ -78,11 +108,14 @@ MariaTime MariaTime::getCurrentTime() {
 }
 
 MariaTime MariaTime::compareTime(MariaTime *a, MariaTime *b){
-	MariaTime toReturn(a->getYear()-b->getYear() + YEAR_OFFSET,
-						a->getMonth() - b->getMonth() + MONTH_OFFSET,
-						a->getDay() - b->getDay(),
-						a->getHour() - b ->getHour(),
-						a->getMin() - b->getMin(),
-						a->getSec() - b->getSec() );
+	double difference = difftime(a->get(), b->get());
+	MariaTime toReturn;
+	toReturn.setSec((int)difference % 60);
+	difference /= 60;
+	toReturn.setMin((int)difference%(60));
+	difference /= 60;
+	toReturn.setHour((int)difference%(24));
+	difference /= 24;
+	toReturn.setDay((int)difference);
 	return toReturn;
 }

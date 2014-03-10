@@ -21,7 +21,6 @@ MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	//Put loading intensive stuffs in-between changing state to intro and to other state.
 	//mariaUI->setState(MariaUI::HOME);
 
-
 	//Below are things that you can edit.
 	//mariaUI->setBackgroundColor("#ff88ff");
 	mariaUI->getCommandBar()->getTextbox()->setQuestionText("What would you like to do?");

@@ -24,6 +24,13 @@ public:
 	int getMin();
 	int getSec();
 
+	void setYear(int);
+	void setMonth(int);
+	void setDay(int);
+	void setHour(int);
+	void setMin(int);
+	void setSec(int);
+
 
 	static MariaTime getCurrentTime();
 	static MariaTime compareTime(MariaTime *a, MariaTime *b);
