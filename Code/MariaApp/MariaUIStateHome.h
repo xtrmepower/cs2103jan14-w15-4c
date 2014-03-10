@@ -32,8 +32,8 @@ public:
 	MariaUIStateHome(MariaTaskManager *taskManager,QMainWindow* qmainWindow);
 	~MariaUIStateHome();
 
-	void addTask(MariaTask task);
-	void eraseTask(int index);
+	MariaUITask* addTask(MariaTask *task);
+	MariaUITask* eraseTask(int index);
 	void clearTask();
 };
 

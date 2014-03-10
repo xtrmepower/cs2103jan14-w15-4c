@@ -2,8 +2,8 @@
 #include "MariaUI.h"
 #include "MariaTaskManager.h"
 
-const float MariaUIStateHome::TASKBAR_STARTHEIGHT_SCALE=0.35;
-const float MariaUIStateHome::TASK_STARTHEIGHT_SCALE=0.5;
+const float MariaUIStateHome::TASKBAR_STARTHEIGHT_SCALE=0.25;
+const float MariaUIStateHome::TASK_STARTHEIGHT_SCALE=0.35;
 const float MariaUIStateHome::TASK_STARTHEIGHT_DIFFERENCE=16.0;
 
 MariaUIStateHome::MariaUIStateHome(MariaTaskManager *taskManager,QMainWindow* qmainWindow) : MariaStateObject(qmainWindow) {
@@ -14,6 +14,7 @@ MariaUIStateHome::MariaUIStateHome(MariaTaskManager *taskManager,QMainWindow* qm
 }
 
 MariaUIStateHome::~MariaUIStateHome() {
+	clearTask();
 	delete _clock;
 }
 
@@ -26,12 +27,16 @@ void MariaUIStateHome::initBeginState() {
 void MariaUIStateHome::initActiveState() {
 	vector<MariaTask*> tempList = _taskManager->findTask("");
 	for(MariaTask* temp : tempList){
-		addTask(*temp);
+		addTask(temp);
 	}
 }
 
 void MariaUIStateHome::initEndState() {
 	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(MariaUICommandBar::DEFAULT_Y_POSITION);
+
+	for(int i=0;i<_taskStack.size();i++) {
+		_taskStack.at(i)->setDestination(QPointF(-_qmainWindow->width(),_qmainWindow->height()*TASK_STARTHEIGHT_SCALE+TASK_STARTHEIGHT_DIFFERENCE*i));
+	}
 }
 
 bool MariaUIStateHome::timerBeginState() {
@@ -48,7 +53,7 @@ bool MariaUIStateHome::timerEndState() {
 	return false;
 }
 
-void MariaUIStateHome::addTask(MariaTask task) {
+MariaUITask* MariaUIStateHome::addTask(MariaTask *task) {
 	MariaUITask *temp = new MariaUITask(_qmainWindow,task,_qmainWindow->width()-TEXTBOX_X_OFFSET*2);
 
 	temp->setPosition(QPointF(_qmainWindow->width(),_qmainWindow->height()*TASK_STARTHEIGHT_SCALE+TASK_STARTHEIGHT_DIFFERENCE*_taskStack.size()));
@@ -56,10 +61,19 @@ void MariaUIStateHome::addTask(MariaTask task) {
 	temp->show();
 
 	_taskStack.push_back(temp);
+	temp->setTitlePretext(std::to_string(_taskStack.size())+". ");
+
+	return temp;
 }
 
-void MariaUIStateHome::eraseTask(int index) {
+MariaUITask* MariaUIStateHome::eraseTask(int index) {
+	MariaUITask *temp=_taskStack.at(index);
+	_taskStack.erase(_taskStack.begin()+index);
 
+	for(int i=0;i<_taskStack.size();i++) {
+		_taskStack.at(i)->setTitlePretext(std::to_string(i)+". ");
+	}
+	return temp;
 }
 
 void MariaUIStateHome::clearTask() {

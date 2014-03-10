@@ -11,7 +11,7 @@ const float MariaUIStateLoading::TEXT_STAGE_Y_SCALE=0.6;
 const float MariaUIStateLoading::DOTS_STAGE_Y_SCALE=0.8;
 const float MariaUIStateLoading::DOTS_X_OFFSET=10;
 const float MariaUIStateLoading::DOTS_SEPARATION_WIDTH=50;
-const float MariaUIStateLoading::DOTS_X_SPEED=0.08;
+const float MariaUIStateLoading::DOTS_X_SPEED=0.15;
 const float MariaUIStateLoading::DOTS_X_VARIABLE_SPEED=0.5;
 
 MariaUIStateLoading::MariaUIStateLoading(QMainWindow* qmainWindow) : MariaStateObject(qmainWindow) {

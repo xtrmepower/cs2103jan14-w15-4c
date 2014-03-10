@@ -23,8 +23,8 @@ private:
 	QPointF _position;
 	
 	QLabel *_displayTitle;
-	MariaTask::TaskType _taskType;
-	MariaTime _deadline;
+	MariaTask *_taskReference;
+
 
 	QLabel *_timeText;
 	float _width;
@@ -37,9 +37,10 @@ protected slots:
 	void updateTimeText();
 
 public:
-	MariaUITask(QMainWindow *qmainWindow, MariaTask task, float width);
+	MariaUITask(QMainWindow *qmainWindow, MariaTask *task, float width);
 	~MariaUITask();
 
+	void setTitlePretext(string pretext);
 	void setPosition(QPointF position);
 	QPointF getPosition();
 	void setDestination(QPointF destination);

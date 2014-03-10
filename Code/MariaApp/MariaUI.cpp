@@ -173,8 +173,12 @@ void MariaUI::keyReleaseEvent(QKeyEvent* keyevent){
 		_mariaLogic->processCommand(_commandBar->getTextbox()->getUserInput());
 	}else{
 		//todo: tick / question if keyword detected
-		_commandBar->getStatus()->setStatus(MariaUIStatus::WAIT);
-		_commandBar->getTextbox()->setSuggestText("");
+		if(_commandBar->getTextbox()->getUserInput()=="") {
+			_commandBar->getStatus()->setStatus(MariaUIStatus::NONE);
+		} else {
+			_commandBar->getStatus()->setStatus(MariaUIStatus::WAIT);
+			_commandBar->getTextbox()->setSuggestText("");
+		}
 	}
 }
 /*
