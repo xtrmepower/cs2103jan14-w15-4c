@@ -12,9 +12,10 @@ public:
 	typedef enum {
 		BLANK,
 		HOME,
-		CALENDAR,
+		SHOW,
+		EDIT,
 		SETTING,
-		DETAIL,
+		CONFLICT,
 		LOADING,
 		QUIT
 	} STATE_TYPE;

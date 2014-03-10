@@ -2,6 +2,7 @@
 #include "MariaUIStatus.h"
 #include "MariaUIStateLoading.h"
 #include "MariaUIStateHome.h"
+#include "MariaUIStateShow.h"
 
 MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	mariaInterpreter = new MariaInterpreter();
@@ -106,8 +107,8 @@ bool MariaLogic::processCommand(std::string inputText) {
 			}
 		} else if(commandType == MariaInterpreter::CommandType::ShowAllTask){
 			mariaUI->getCommandBar()->getTextbox()->setQuestionText("Sure, here's a calendar for demo purposes.");
-			//mariaStateManager->queueState(MariaStateManager::CALENDAR);
-			//mariaStateManager->transitState();
+			mariaStateManager->queueState(MariaStateManager::SHOW,new MariaUIStateShow((QMainWindow*)mariaUI));
+			mariaStateManager->transitState();
 		} else {
 			mariaUI->getCommandBar()->getTextbox()->setQuestionText("Its a valid command, but I'm limited.");
 			//mariaStateManager->queueState(MariaStateManager::HOME);

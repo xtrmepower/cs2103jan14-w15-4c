@@ -32,7 +32,6 @@ void MariaUIStateHome::initActiveState() {
 }
 
 void MariaUIStateHome::initEndState() {
-	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(MariaUICommandBar::DEFAULT_Y_POSITION);
 
 	for(int i=0;i<_taskStack.size();i++) {
 		_taskStack.at(i)->setDestination(QPointF(-_qmainWindow->width(),_qmainWindow->height()*TASK_STARTHEIGHT_SCALE+TASK_STARTHEIGHT_DIFFERENCE*i));

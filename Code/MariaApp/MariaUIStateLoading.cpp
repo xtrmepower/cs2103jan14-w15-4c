@@ -5,7 +5,7 @@ const float MariaUIStateLoading::FLOW_FACTOR=0.01;
 const float MariaUIStateLoading::VALUE_THRESHOLD=0.5;
 const float MariaUIStateLoading::DISPLAY_TEXT_WIDTH=300;
 const float MariaUIStateLoading::DISPLAY_TEXT_HEIGHT=20;
-const float MariaUIStateLoading::LOGO_START_Y=-50;
+const float MariaUIStateLoading::LOGO_START_Y=-100;
 const float MariaUIStateLoading::LOGO_STAGE_Y_SCALE=0.4;
 const float MariaUIStateLoading::TEXT_STAGE_Y_SCALE=0.6;
 const float MariaUIStateLoading::DOTS_STAGE_Y_SCALE=0.8;
@@ -39,6 +39,8 @@ MariaUIStateLoading::~MariaUIStateLoading() {
 }
 
 void MariaUIStateLoading::initBeginState() {
+	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(MariaUICommandBar::DEFAULT_Y_POSITION);
+
 	((MariaUI*)_qmainWindow)->setBackgroundColor(MariaUI::WINDOW_DEFAULT_COLOR_R,MariaUI::WINDOW_DEFAULT_COLOR_G,MariaUI::WINDOW_DEFAULT_COLOR_B);
 
 	_displayText->setStyleSheet("color:#ffffff;");
