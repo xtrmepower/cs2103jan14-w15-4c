@@ -3,7 +3,8 @@
 
 const float MariaUITask::FLOW_FACTOR=0.01;
 const float MariaUITask::VALUE_THRESHOLD=1.0;
-const float MariaUITask::TASK_HEIGHT=20.0;
+const float MariaUITask::FONT_SIZE=10.0;
+const float MariaUITask::TASK_HEIGHT=14.0;
 const string MariaUITask::MESSAGE_DEADLINETASK_DUE="Due in ";
 const string MariaUITask::MESSAGE_DEADLINETASK_OVERDUE="Overdue by ";
 const string MariaUITask::MESSAGE_TIMEDTASK_BEFORE="Starting in ";
@@ -20,18 +21,18 @@ MariaUITask::MariaUITask(QMainWindow *qmainWindow, MariaTask task, float width) 
 	_taskType = task.getType();
 	switch(_taskType) {
 	case MariaTask::FLOATING:
-		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,0,0,128);border: 1px solid white;");		
+		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,0,0,128);border: 1px solid rgba(25,25,25,25);font-size:"+QString::number(FONT_SIZE)+"px;");		
 		break;
 	case MariaTask::DEADLINE:
-		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,255,0,128);border: 1px solid white;");
+		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,255,0,128);border: 1px solid rgba(25,25,25,25);font-size:"+QString::number(FONT_SIZE)+"px;");
 		_deadline=task.getEnd();
 		break;
 	case MariaTask::TIMED:
-		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,255,128,128);border: 1px solid white;");
+		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(255,255,128,128);border: 1px solid rgba(25,25,25,25);font-size:"+QString::number(FONT_SIZE)+"px;");
 		_deadline=task.getStart();
 		break;
 	default:
-		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(0,0,255,128);border: 1px solid white;");
+		_displayTitle->setStyleSheet("color:#ffffff; background-color:rgba(0,0,255,128);border: 1px solid white;font-size:"+QString::number(FONT_SIZE)+"px;");
 		break;
 	}
 	_displayTitle->setText(QString::fromStdString(task.getTitle()));

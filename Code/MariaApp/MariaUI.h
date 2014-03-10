@@ -20,9 +20,9 @@ public:
 	static const float FLOW_FACTOR;
 	static const float VALUE_THRESHOLD;
 	static const int WINDOW_DEFAULT_SIZE_X=480;
-	static const int WINDOW_DEFAULT_SIZE_Y=160;
+	static const int WINDOW_DEFAULT_SIZE_Y=320;
 	static const int WINDOW_DEFAULT_EXPAND_SIZE_X=480;
-	static const int WINDOW_DEFAULT_EXPAND_SIZE_Y=360;
+	static const int WINDOW_DEFAULT_EXPAND_SIZE_Y=600;
 	static const float CLOSE_BUTTON_X_OFFSET;
 	static const float CLOSE_BUTTON_Y_OFFSET;
 	static const float WINDOW_DEFAULT_COLOR_R;

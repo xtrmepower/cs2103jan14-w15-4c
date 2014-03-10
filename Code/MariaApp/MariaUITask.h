@@ -10,6 +10,7 @@ class MariaUITask : QWidget{
 public:
 	static const float FLOW_FACTOR;
 	static const float VALUE_THRESHOLD;
+	static const float FONT_SIZE;
 	static const float TASK_HEIGHT;
 	static const string MESSAGE_DEADLINETASK_DUE;
 	static const string MESSAGE_DEADLINETASK_OVERDUE;

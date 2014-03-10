@@ -11,6 +11,7 @@ class MariaTaskManager;
 class MariaUIStateHome : public MariaStateObject {
 public:
 	static const int TEXTBOX_X_OFFSET=30;
+	static const float TASKBAR_STARTHEIGHT_SCALE;
 	static const float TASK_STARTHEIGHT_SCALE;
 	static const float TASK_STARTHEIGHT_DIFFERENCE;
 

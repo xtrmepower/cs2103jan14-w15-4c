@@ -4,11 +4,11 @@
 const float MariaUIClock::TIME_WIDTH=100;
 const float MariaUIClock::TIME_HEIGHT=25;
 const float MariaUIClock::TIME_X_OFFSET=-30;
-const float MariaUIClock::TIME_Y_OFFSET=20;
+const float MariaUIClock::TIME_Y_OFFSET=12;
 const float MariaUIClock::DATE_WIDTH=100;
 const float MariaUIClock::DATE_HEIGHT=15;
 const float MariaUIClock::DATE_X_OFFSET=-30;
-const float MariaUIClock::DATE_Y_OFFSET=40;
+const float MariaUIClock::DATE_Y_OFFSET=32;
 
 MariaUIClock::MariaUIClock(QMainWindow *qmainWindow) {
 	_qmainWindow=qmainWindow;

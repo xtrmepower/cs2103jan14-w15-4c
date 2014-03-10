@@ -2,8 +2,9 @@
 #include "MariaUI.h"
 #include "MariaTaskManager.h"
 
-const float MariaUIStateHome::TASK_STARTHEIGHT_SCALE=0.6;
-const float MariaUIStateHome::TASK_STARTHEIGHT_DIFFERENCE=22.0;
+const float MariaUIStateHome::TASKBAR_STARTHEIGHT_SCALE=0.35;
+const float MariaUIStateHome::TASK_STARTHEIGHT_SCALE=0.5;
+const float MariaUIStateHome::TASK_STARTHEIGHT_DIFFERENCE=16.0;
 
 MariaUIStateHome::MariaUIStateHome(MariaTaskManager *taskManager,QMainWindow* qmainWindow) : MariaStateObject(qmainWindow) {
 	_qmainWindow=qmainWindow;
@@ -18,7 +19,7 @@ MariaUIStateHome::~MariaUIStateHome() {
 
 void MariaUIStateHome::initBeginState() {
 	_clock->startUpdating();
-	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(_qmainWindow->height()*0.5);
+	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(_qmainWindow->height()*TASKBAR_STARTHEIGHT_SCALE);
 	((MariaUI*)_qmainWindow)->setBackgroundColor(255,127,39);
 }
 
