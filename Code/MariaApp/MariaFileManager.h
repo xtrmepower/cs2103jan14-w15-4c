@@ -16,6 +16,7 @@ public:
 	static const string TASK_ENDTIME_FIELD;
 	static const string TASK_CLOSE_FIELD;
 	static const char NEW_LINE = '\n';
+	static const string TIME_FORMAT;
 
 	MariaFileManager(void);
 	~MariaFileManager(void);
@@ -29,6 +30,7 @@ private:
 
 	MariaTask* stringToTask(string inputText[]);
 	string taskToString(MariaTask *task);
+	MariaTime* stringToTime(string inputText);
 
 	string getFirstWord(string inputText);
 	string removeFirstWord(string inputText, string firstWord);

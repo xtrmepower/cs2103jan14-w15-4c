@@ -7,6 +7,7 @@ const string MariaFileManager::TASK_DESC_FIELD = "\t[Desc]";
 const string MariaFileManager::TASK_STARTTIME_FIELD = "\t[Start]";
 const string MariaFileManager::TASK_ENDTIME_FIELD = "\t[End]";
 const string MariaFileManager::TASK_CLOSE_FIELD = "[End Task]";
+const string MariaFileManager::TIME_FORMAT = "%Y-%m-%d %H:%M:%S";
 
 MariaFileManager::MariaFileManager(void){
 	
@@ -89,13 +90,21 @@ MariaTask* MariaFileManager::stringToTask(string inputText[]){
 		}else if (field == TASK_DESC_FIELD){
 			newTask->setDescription(value);
 		}else if (field == TASK_STARTTIME_FIELD){
-			newTask->setStart(new MariaTime());
+			newTask->setStart(stringToTime(value));
 		}else if (field == TASK_ENDTIME_FIELD){
-			newTask->setEnd(new MariaTime());
+			newTask->setEnd(stringToTime(value));
 		}
 		
 	}
 	return newTask;
+}
+
+MariaTime* MariaFileManager::stringToTime(string inputText){
+	if(inputText == ""){
+		return NULL;
+	}else{
+		return new MariaTime(inputText,TIME_FORMAT);
+	}
 }
 
 string MariaFileManager::taskToString(MariaTask *task){
@@ -103,8 +112,8 @@ string MariaFileManager::taskToString(MariaTask *task){
 	string returnString = TASK_OPEN_FIELD 		 + NEW_LINE +
 							TASK_TITLE_FIELD	 + task->getTitle()			+ NEW_LINE +
 							TASK_DESC_FIELD		 + task->getDescription()	+ NEW_LINE +
-							TASK_STARTTIME_FIELD + task->getStart()->get("")	+ NEW_LINE +
-							TASK_ENDTIME_FIELD	 + task->getEnd()->get("")	+ NEW_LINE +
+							TASK_STARTTIME_FIELD + task->getStart()->get(TIME_FORMAT)	+ NEW_LINE +
+							TASK_ENDTIME_FIELD	 + task->getEnd()->get(TIME_FORMAT)	+ NEW_LINE +
 							TASK_CLOSE_FIELD    + NEW_LINE;
 
 	return returnString;
