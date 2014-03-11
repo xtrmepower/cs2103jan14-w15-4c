@@ -5,6 +5,8 @@
 #include "MariaUIStateShow.h"
 
 MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
+	QApplication::setWindowIcon(QIcon(QString::fromStdString("Resources/maria_icon.png")));
+
 	mariaInterpreter = new MariaInterpreter();
 	mariaFileManager = new MariaFileManager();
  	mariaTaskManager = new MariaTaskManager(mariaFileManager->openFile());
@@ -20,7 +22,7 @@ MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	//mariaUI->getLoading()->setDisplayText("Loading");
 	//Put loading intensive stuffs in-between changing state to intro and to other state.
 	//mariaUI->setState(MariaUI::HOME);
-
+	
 	//Below are things that you can edit.
 	//mariaUI->setBackgroundColor("#ff88ff");
 	mariaUI->getCommandBar()->getTextbox()->setQuestionText("What would you like to do?");

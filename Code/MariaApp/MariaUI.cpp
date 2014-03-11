@@ -20,6 +20,9 @@ MariaUI::MariaUI(MariaLogic *mariaLogic, QWidget *parent) : QMainWindow(parent) 
 	_commandBar = new MariaUICommandBar(this);
 	_commandBar->getTextbox()->setFocus();
 	show();
+
+	trayIcon = new QSystemTrayIcon(QIcon(QString::fromStdString("Resources/maria_icon.png")));
+
 }
 
 MariaUI::~MariaUI() {
@@ -168,6 +171,11 @@ void MariaUI::resizeEvent(QResizeEvent* event) {
 
 void MariaUI::keyReleaseEvent(QKeyEvent* keyevent){
 	int keyPressed = keyevent->key();
+	/*if(keyPressed == Qt::Key_Control && keyevent->modifiers() == Qt::CTRL + Qt::Key_Space){
+		this->setWindowState(Qt::WindowState::WindowMinimized);
+		trayIcon->show();
+                hide();
+	}*/
 
 	if(keyPressed == Qt::Key_Return || keyPressed == Qt::Key_Enter){
 		_mariaLogic->processCommand(_commandBar->getTextbox()->getUserInput());
@@ -179,6 +187,7 @@ void MariaUI::keyReleaseEvent(QKeyEvent* keyevent){
 			_commandBar->getStatus()->setStatus(MariaUIStatus::WAIT);
 			_commandBar->getTextbox()->setSuggestText("");
 		}
+		keyevent->ignore();
 	}
 }
 /*

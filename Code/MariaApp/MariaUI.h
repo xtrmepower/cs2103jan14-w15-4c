@@ -9,8 +9,10 @@
 #include <QtWidgets/QMainWindow>
 #include <QtCore/QTimer>
 #include <QtWidgets/qtoolbutton.h>
+#include <QtWidgets/qsystemtrayicon.h>
 #include "MariaUICommandBar.h"
 #include "MariaUITextbox.h"
+#include <QtWidgets/qshortcut.h>
 
 class MariaLogic;
 class MariaUI : QMainWindow {
@@ -39,6 +41,7 @@ private:
 	QTimer *_bkgColorUpdateTimer;
 	QColor _bkgColor;
 	QColor _targetBkgColor;
+	QSystemTrayIcon *trayIcon;
 
 
 	//Load images used in application.
