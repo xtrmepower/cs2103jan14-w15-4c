@@ -6,9 +6,9 @@ const float MariaUITask::VALUE_THRESHOLD=1.0;
 const float MariaUITask::FONT_SIZE=10.0;
 const float MariaUITask::TASK_HEIGHT=14.0;
 const float MariaUITask::TIMESTAMP_X_OFFSET=-3.0;
-const string MariaUITask::MESSAGE_DEADLINETASK_DUE="Due in";
-const string MariaUITask::MESSAGE_DEADLINETASK_OVERDUE="Overdue b ";
-const string MariaUITask::MESSAGE_TIMEDTASK_BEFORE="Starting in";
+const string MariaUITask::MESSAGE_DEADLINETASK_DUE="Due in ";
+const string MariaUITask::MESSAGE_DEADLINETASK_OVERDUE="Overdue";
+const string MariaUITask::MESSAGE_TIMEDTASK_BEFORE="Starting in ";
 const string MariaUITask::MESSAGE_TIMEDTASK_AFTER="Event started";
 
 MariaUITask::MariaUITask(QMainWindow *qmainWindow, MariaTask *task, float width) {
@@ -87,22 +87,26 @@ bool MariaUITask::updatePosition() {
 }
 
 void MariaUITask::updateTimeText() {
-	if(_taskReference->getType() == MariaTask::FLOATING){
-		return;
-	}
+
 	string timeFormatted = _taskReference->getTimeFromNow();
 
-	switch(_taskReference->getType()) {
-	case MariaTask::DEADLINE:
-		_timeText->setText(QString::fromStdString(MESSAGE_DEADLINETASK_DUE+timeFormatted));
-		break;
-	case MariaTask::TIMED:
-		_timeText->setText(QString::fromStdString(MESSAGE_TIMEDTASK_BEFORE+timeFormatted));
-		break;
-	default:
-		_timeText->setText("");
-		break;
+	if(_taskReference->getType() == MariaTask::DEADLINE) {
+		if(timeFormatted.empty()){
+			timeFormatted = MESSAGE_DEADLINETASK_OVERDUE;
+		}else{
+			timeFormatted = MESSAGE_DEADLINETASK_DUE + timeFormatted;
+		}
+		_timeText->setText(QString::fromStdString(timeFormatted));
+
+	}else if(_taskReference->getType() == MariaTask::TIMED){
+		if(timeFormatted.empty()){
+			timeFormatted = MESSAGE_TIMEDTASK_AFTER;
+		}else{
+			timeFormatted = MESSAGE_TIMEDTASK_BEFORE + timeFormatted;
+		}
 	}
+	_timeText->setText(QString::fromStdString(timeFormatted));
+	
 }
 
 void MariaUITask::setPosition(QPointF position) {

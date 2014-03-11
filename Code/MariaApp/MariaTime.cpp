@@ -105,7 +105,7 @@ string MariaTime::getTimeFromNow(){
 	double difference = difftime(timeStamp, currentTime);
 
 	if(difference < 0){
-		return "is overdue.";
+		return "";
 	}else if(difference > 60*60*24*30){
 		return  to_string((int)difference / ( 60*60*24*30)) +" Months";
 	}else if(difference > 60*60*24*7){
@@ -115,15 +115,15 @@ string MariaTime::getTimeFromNow(){
 	}else{
 		string returnString;
 		if(((int)difference % 60) >0 ){
-			returnString += to_string((int)difference % 60) + " seconds";
+			returnString += to_string((int)difference % 60) + " Seconds";
 		}
 		difference /= 60;
 		if(((int)difference % 60) >0 ){
-			returnString = to_string((int)difference % 60) + " minutes" + returnString;
+			returnString = to_string((int)difference % 60) + " Minutes " + returnString;
 		}
 		difference /= 60;
 		if(((int)difference % 24) >0 ){
-			returnString = to_string((int)difference % 24) + " hours" + returnString;
+			returnString = to_string((int)difference % 24) + " Hours " + returnString;
 		}
 		return returnString;
 	}
