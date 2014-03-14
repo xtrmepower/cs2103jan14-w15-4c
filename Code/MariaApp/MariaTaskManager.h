@@ -22,4 +22,5 @@ private:
 public:
 #endif
 	vector<MariaTask*> *taskList;
+	string lowercaseString(string text);
 };

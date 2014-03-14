@@ -22,9 +22,10 @@ MariaTask* MariaTaskManager::addTask(string name, MariaTime* start, MariaTime* e
 
 vector<MariaTask*> MariaTaskManager::findTask(std::string searchString){
 	vector<MariaTask*> returnList;
+	searchString = lowercaseString(searchString);
 
 	for(MariaTask* temp : *taskList){
-		if(temp->getTitle().find(searchString) != string::npos){
+		if(lowercaseString(temp->getTitle()).find(searchString) != string::npos){
 			returnList.push_back(temp);
 		}
 	}
@@ -56,4 +57,14 @@ bool MariaTaskManager::archiveTask(MariaTask* task){
 		return false;
 	}
 	
+}
+
+string MariaTaskManager::lowercaseString(string text) {
+	string toReturn = "";
+
+	for (int i = 0; i < text.size(); i++) {
+		toReturn += tolower(text[i]);
+	}
+
+	return toReturn;
 }
