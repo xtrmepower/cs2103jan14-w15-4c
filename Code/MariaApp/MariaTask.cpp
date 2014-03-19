@@ -80,3 +80,7 @@ void MariaTask::refreshTaskType(){
 		type = TaskType::TIMED;
 	}
 }
+
+bool MariaTask::operator<(MariaTask rhs) { 
+	return title < rhs.getTitle(); 
+}
