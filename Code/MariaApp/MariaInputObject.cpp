@@ -10,11 +10,15 @@ MariaInputObject::MariaInputObject() {
 }
 
 MariaInputObject::~MariaInputObject() {
-	delete _startTime;
-	_startTime = NULL;
+	if (_startTime != NULL) {
+		delete _startTime;
+		_startTime = NULL;
+	}
 
-	delete _endTime;
-	_endTime = NULL;
+	if (_endTime != NULL) {
+		delete _endTime;
+		_endTime = NULL;
+	}
 }
 
 void MariaInputObject::setValidity(bool valid) {
@@ -37,8 +41,8 @@ void MariaInputObject::setEditField(string newEditField) {
 	_editField = newEditField;
 }
 
-void MariaInputObject::setConflictID(int newConflictID) {
-	_conflictID = newConflictID;
+void MariaInputObject::setOptionID(int newOptionID) {
+	_optionID = newOptionID;
 }
 
 void MariaInputObject::setStartTime(MariaTime* newStartTime) {
@@ -77,8 +81,8 @@ string MariaInputObject::getEditField() const {
 	return _editField;
 }
 
-int MariaInputObject::getConflictID() const {
-	return _conflictID;
+int MariaInputObject::getOptionID() const {
+	return _optionID;
 }
 
 MariaTime* MariaInputObject::getStartTime() const {

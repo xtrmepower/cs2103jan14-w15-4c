@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MariaTime.h"
+#include "MariaStateManager.h"
 
 class MariaInputObject {
 public:
@@ -12,6 +13,8 @@ public:
 		CommandDelete,
 		CommandDeleteAll,
 		CommandGoToHome,
+		CommandGoUp,
+		CommandGoDown,
 		CommandExit,
 	} CommandType;
 
@@ -37,7 +40,7 @@ public:
 	void setCommandType(CommandType newCommandType);
 	void setTitle(string newTitle);
 	void setEditField(string newEditField);
-	void setConflictID(int newConflictID);
+	void setOptionID(int newOptionID);
 	void setStartTime(MariaTime* newStartTime);
 	void setEndTime(MariaTime* newEndTime);
 	void setAddType(AddType newAddType);
@@ -48,7 +51,7 @@ public:
 	CommandType getCommandType() const;
 	string getTitle() const;
 	string getEditField() const;
-	int getConflictID() const;
+	int getOptionID() const;
 	MariaTime* getStartTime() const;
 	MariaTime* getEndTime() const;
 	AddType getAddType() const;
@@ -63,7 +66,7 @@ private:
 	string _originalInput;
 	string _title;
 	string _editField;
-	int _conflictID;
+	int _optionID;
 	MariaTime* _startTime;
 	MariaTime* _endTime;
 };
