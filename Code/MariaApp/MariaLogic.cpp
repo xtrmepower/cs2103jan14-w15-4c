@@ -69,7 +69,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 
 				//Check if the current state is the home state, do a live add.
 				if(mariaStateManager->getCurrentState()==MariaStateManager::STATE_TYPE::HOME) {
-					((MariaUIStateHome*)mariaStateManager->getCurrentStateObject())->addTask(toAdd);
+					((MariaUIStateHome*)mariaStateManager->getCurrentStateObject())->addTask(toAdd, MariaUITask::DISPLAY_TYPE::NORMAL);
 					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 				}
 			} else {
@@ -103,7 +103,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 				} else {
 					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar task, which one should I edit?");
 
-					mariaStateManager->queueState(MariaStateManager::CONFLICT,new MariaUIStateConflict(toEditTitle,mariaTaskManager,(QMainWindow*)mariaUI));
+					mariaStateManager->queueState(MariaStateManager::CONFLICT,new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
 					mariaStateManager->transitState();
 				}
 			}
@@ -144,7 +144,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 				} else {
 					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar task, which one should I removed?");
 
-					mariaStateManager->queueState(MariaStateManager::CONFLICT,new MariaUIStateConflict(toDeleteTitle,mariaTaskManager,(QMainWindow*)mariaUI));
+					mariaStateManager->queueState(MariaStateManager::CONFLICT,new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toDeleteTitle));
 					mariaStateManager->transitState();
 				}
 			}

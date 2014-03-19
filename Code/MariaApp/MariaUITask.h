@@ -72,5 +72,7 @@ public:
 	void show();
 	void hide();
 
+	float getTaskHeight();
+
 	MariaTask * getMariaTask();
 };

@@ -7,13 +7,13 @@ MariaStateManager::MariaStateManager() {
 	_transitCalled=false;
 
 	_stateBeginTimer = new QTimer(this);
-	connect(_stateBeginTimer, SIGNAL(timeout()), this, SLOT(timerBeginUpdate()));
+	connect(_stateBeginTimer, SIGNAL(timeout()), this, SLOT(timerBeginState()));
 
 	_stateActiveTimer = new QTimer(this);
-	connect(_stateActiveTimer, SIGNAL(timeout()), this, SLOT(timerActiveUpdate()));
+	connect(_stateActiveTimer, SIGNAL(timeout()), this, SLOT(timerActiveState()));
 
 	_stateEndTimer = new QTimer(this);
-	connect(_stateEndTimer, SIGNAL(timeout()), this, SLOT(timerEndUpdate()));
+	connect(_stateEndTimer, SIGNAL(timeout()), this, SLOT(timerEndState()));
 }
 
 MariaStateManager::~MariaStateManager() {
@@ -53,7 +53,7 @@ void MariaStateManager::initEndState() {
 	_stateEndTimer->start(1);
 }
 
-void MariaStateManager::timerBeginUpdate() {
+void MariaStateManager::timerBeginState() {
 	if(!_currentStateObject->timerBeginState()&&!_currentStateObject->updatePosition()) {
 		_stateBeginTimer->stop();
 		initActiveState();
@@ -61,7 +61,7 @@ void MariaStateManager::timerBeginUpdate() {
 	}
 }
 
-void MariaStateManager::timerActiveUpdate() {
+void MariaStateManager::timerActiveState() {
 	if(!_currentStateObject->timerActiveState()) {
 		_stateActiveTimer->stop();
 
@@ -71,7 +71,7 @@ void MariaStateManager::timerActiveUpdate() {
 	}
 }
 
-void MariaStateManager::timerEndUpdate() {
+void MariaStateManager::timerEndState() {
 	if(!_currentStateObject->timerEndState()&&!_currentStateObject->updatePosition()) {
 		_stateEndTimer->stop();
 

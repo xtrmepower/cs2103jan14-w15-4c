@@ -45,9 +45,9 @@ private:
 	void initEndState();
 
 private slots:
-	void timerBeginUpdate();
-	void timerActiveUpdate();
-	void timerEndUpdate();
+	void timerBeginState();
+	void timerActiveState();
+	void timerEndState();
 
 public:
 	MariaStateManager();

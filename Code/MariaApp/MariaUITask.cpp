@@ -214,6 +214,21 @@ void MariaUITask::hide() {
 	}
 }
 
+
+float MariaUITask::getTaskHeight() {
+	float toReturn;
+
+	switch(_currentType) {
+	case NORMAL:
+		toReturn=TASK_HEIGHT;
+		break;
+	case EXPANDED:
+		toReturn=TASK_HEIGHT_EXPANDED;
+		break;
+	}
+	return toReturn;
+}
+
 MariaTask * MariaUITask::getMariaTask() {
 	return _taskReference;
 }
