@@ -22,6 +22,7 @@ MariaUI::MariaUI(MariaLogic *mariaLogic, QWidget *parent) : QMainWindow(parent) 
 	show();
 
 	trayIcon = new QSystemTrayIcon(QIcon(QString::fromStdString("Resources/marialogo16x16.png")));
+	trayIcon->setToolTip("M.A.R.I.A.");
 
 	QObject::connect(this,SIGNAL(triggerShowHideEvent()),this, SLOT(showHideEvent()));
 }
@@ -120,6 +121,7 @@ void MariaUI::showHideEvent(){
 	if(isVisible()){
 		setWindowState(Qt::WindowState::WindowMinimized);
 		trayIcon->show();
+		trayIcon->showMessage("M.A.R.I.A. is still running!","Press Ctrl + Space to show M.A.R.I.A.\nType \'exit\' to quit the program.");
 		hide();
 	}else{
 		setWindowState(Qt::WindowState::WindowActive);
