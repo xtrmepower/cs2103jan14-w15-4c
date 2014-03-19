@@ -37,7 +37,7 @@ public:
 #else
 private:
 #endif
-	map<string, MariaInputObject::CommandType> *userDefinedCommands;
+	map<string, MariaInputObject::CommandType>* commandKeywordList;
 
 	/// Gets a CommandType flag depending on the user's input.
 	/// The command keyword would also be removed from the inputString.

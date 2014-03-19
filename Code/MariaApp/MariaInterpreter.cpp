@@ -1,10 +1,34 @@
 #include "MariaInterpreter.h"
 
 MariaInterpreter::MariaInterpreter(map<string, MariaInputObject::CommandType> *inputCommandList){
-	userDefinedCommands = inputCommandList;
+	commandKeywordList = inputCommandList;
+	if (commandKeywordList == NULL) {
+		commandKeywordList = new map<string, MariaInputObject::CommandType>();
+	}
+
+	// Create our keyword association to the command.
+	//TODO: Put this into an ini file.
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("add", MariaInputObject::CommandAdd));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("create", MariaInputObject::CommandAdd));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("edit", MariaInputObject::CommandEdit));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("update", MariaInputObject::CommandEdit));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("show", MariaInputObject::CommandShowAll));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("view", MariaInputObject::CommandShowAll));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("delete", MariaInputObject::CommandDelete));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("remove", MariaInputObject::CommandDelete));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("clear", MariaInputObject::CommandDeleteAll));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("home", MariaInputObject::CommandGoToHome));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("up", MariaInputObject::CommandGoUp));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("down", MariaInputObject::CommandGoDown));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("exit", MariaInputObject::CommandExit));
+	commandKeywordList->insert(pair<string, MariaInputObject::CommandType>("quit", MariaInputObject::CommandExit));
 }
 
 MariaInterpreter::~MariaInterpreter(void){
+	if (commandKeywordList != NULL) {
+		delete commandKeywordList;
+		commandKeywordList = NULL;
+	}
 }
 
 MariaInputObject* MariaInterpreter::parseInput(string inputString) {
@@ -54,27 +78,10 @@ MariaInputObject::CommandType MariaInterpreter::getCommandType(string &inputStri
 		return command;
 	}
 
-	if (input[0] == "create") {
-		inputString = replaceText(inputString, "create", "");
-		command = MariaInputObject::CommandAdd;
-	} else if (input[0] == "show") {
-		inputString = replaceText(inputString, "show", "");
-		command = MariaInputObject::CommandShowAll;
-	} else if (input[0] == "edit") {
-		inputString = replaceText(inputString, "edit", "");
-		command = MariaInputObject::CommandEdit;
-	} else if (input[0] == "delete") {
-		inputString = replaceText(inputString, "delete", "");
-		command = MariaInputObject::CommandDelete;
-	} else if (input[0] == "clear") {
-		inputString = replaceText(inputString, "clear", "");
-		command = MariaInputObject::CommandDeleteAll;
-	} else if (input[0] == "home") {
-		inputString = replaceText(inputString, "home", "");
-		command = MariaInputObject::CommandGoToHome;
-	} else if (input[0] == "exit") {
-		inputString = replaceText(inputString, "exit", "");
-		command = MariaInputObject::CommandExit;
+	map<string, MariaInputObject::CommandType>::iterator keyword = commandKeywordList->find(input[0]);
+	if (keyword != commandKeywordList->end()) {
+		command = keyword->second;
+		inputString = replaceText(inputString, keyword->first, "");
 	}
 
 	inputString = trimWhiteSpace(inputString);
@@ -240,14 +247,8 @@ bool MariaInterpreter::checkInputValidity(string inputString) {
 
 	// Time to check the first word, which is supposed to be a keyword.
 	input[0] = lowercaseString(input[0]);
-	if (input[0] != "create" &&
-		input[0] != "edit" &&
-		input[0] != "show" &&
-		input[0] != "delete" &&
-		input[0] != "clear" &&
-		input[0] != "home" &&
-		input[0] != "exit" &&
-		input[0] != "quit") {
+	map<string, MariaInputObject::CommandType>::iterator commandKeywordItr = commandKeywordList->find(input[0]);
+	if (commandKeywordItr == commandKeywordList->end()) {
 		return false;
 	}
 
