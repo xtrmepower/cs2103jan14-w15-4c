@@ -27,18 +27,21 @@ public:
 	MariaUIStateDisplay(QMainWindow* qmainWindow, MariaTaskManager *taskManager, float taskStartHeight);
 	~MariaUIStateDisplay();
 
-	MariaUITask* addTask(MariaTask *task, MariaUITask::DISPLAY_TYPE type);
-	void updateTask();
-	void updateTaskDestination(QPointF destination);
-	void updateTaskPosition(QPointF position);
-	void updateNumber();
-	MariaUITask* eraseTask(int index);
-	MariaUITask* eraseTask(MariaTask* task);
-	void eraseAllTask();
-	void clearTask();
-	int getTotalTask();
+	MariaUITask* addUITask(MariaTask *task, MariaUITask::DISPLAY_TYPE type);
+	void updateUITask();
+	void updateUITaskDestination(QPointF destination);
+	void updateUITaskPosition(QPointF position);
+	void updateUITaskNumber();
+	MariaUITask* eraseUITask(int index);
+	MariaUITask* eraseUITask(MariaTask* task);
+	void eraseAllUITask();
+	void clearUITask();
+	int getTotalUITask();
 
 	void setPage(int page);
 	int getPage();
 	void updatePage();
+
+	//Inheritable function to update GUI if there is any UITask operations.
+	virtual void updateGUI();
 };

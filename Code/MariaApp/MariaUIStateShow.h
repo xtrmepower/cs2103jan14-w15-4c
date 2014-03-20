@@ -34,5 +34,7 @@ private:
 public:
 	MariaUIStateShow(QMainWindow* qmainWindow, MariaTaskManager *taskManager, VIEW_TYPE currentViewType, MariaTime targetTime);
 	~MariaUIStateShow();
+	
+	void updateGUI();
 };
 

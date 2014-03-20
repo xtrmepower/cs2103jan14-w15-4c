@@ -12,7 +12,7 @@ MariaUIStateShow::MariaUIStateShow(QMainWindow* qmainWindow, MariaTaskManager *t
 }
 
 MariaUIStateShow::~MariaUIStateShow() {
-	clearTask();
+	clearUITask();
 	delete _titleLabel;
 }
 
@@ -43,12 +43,12 @@ void MariaUIStateShow::initBeginState() {
 void MariaUIStateShow::initActiveState() {
 	vector<MariaTask*> tempList = _taskManager->findTask("");
 	for(MariaTask* temp : tempList) {
-		addTask(temp, MariaUITask::DISPLAY_TYPE::NORMAL);
+		addUITask(temp, MariaUITask::DISPLAY_TYPE::NORMAL);
 	}
 }
 
 void MariaUIStateShow::initEndState() {
-	eraseAllTask();
+	eraseAllUITask();
 }
 
 bool MariaUIStateShow::timerBeginState() {
@@ -63,4 +63,7 @@ bool MariaUIStateShow::timerActiveState() {
 bool MariaUIStateShow::timerEndState() {
 	_titleLabel->setGeometry(QRect(getPosition().x() + _qmainWindow->width()*0.5-60, getPosition().y() + 80, 120, 98));
 	return false;
+}
+
+void MariaUIStateShow::updateGUI() {
 }

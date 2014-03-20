@@ -31,7 +31,7 @@ MariaUIClock::MariaUIClock(QMainWindow *qmainWindow) {
 	_currentDay->hide();
 
 	_clockTimer = new QTimer(this);
- connect(_clockTimer, SIGNAL(timeout()), this, SLOT(updateClock()));
+	connect(_clockTimer, SIGNAL(timeout()), this, SLOT(updateClock()));
 }
 
 MariaUIClock::~MariaUIClock(void) {
@@ -82,7 +82,7 @@ void MariaUIClock::startUpdating() {
 }
 
 void MariaUIClock::updateGUI(QPointF statePosition) {
-	_currentTime->setGeometry(QRect(statePosition.x() + _qmainWindow->width()*0.5-TIME_WIDTH + TIME_X_OFFSET, 
+	_currentTime->setGeometry(QRect(statePosition.x() + _qmainWindow->width()*0.5 - TIME_WIDTH + TIME_X_OFFSET, 
 		statePosition.y() + TIME_Y_OFFSET, TIME_WIDTH, TIME_HEIGHT));
 	_currentDate->setGeometry(QRect(statePosition.x() + _qmainWindow->width()*0.5 + DATE_X_OFFSET, 
 		statePosition.y() + DATE_Y_OFFSET, DATE_WIDTH, DATE_HEIGHT));

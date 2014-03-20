@@ -26,8 +26,8 @@ MariaUICommandBar::~MariaUICommandBar() {
 }
 
 void MariaUICommandBar::updateGUI() {
-	if(abs(_yPosition-_yDestination)>VALUE_THRESHOLD) {
-		_yPosition += (_yDestination-_yPosition)*FLOW_FACTOR;
+	if(abs(_yPosition - _yDestination)>VALUE_THRESHOLD) {
+		_yPosition += (_yDestination - _yPosition) * FLOW_FACTOR;
 	} else {
 		_updateGUITimer->stop();
 	}

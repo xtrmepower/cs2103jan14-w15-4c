@@ -7,6 +7,7 @@
 #include "MariaUIClock.h"
 #include "MariaUITask.h"
 #include "MariaTask.h"
+#include "MariaUIPreview.h"
 
 class MariaTaskManager;
 class MariaUIStateHome : public MariaUIStateDisplay {
@@ -17,6 +18,7 @@ public:
 
 private:
 	MariaUIClock *_clock;
+	MariaUIPreview *_preview;
 
 	void initBeginState();
 	void initActiveState();
@@ -28,5 +30,7 @@ private:
 public:
 	MariaUIStateHome(QMainWindow* qmainWindow, MariaTaskManager *taskManager);
 	~MariaUIStateHome();
+
+	void updateGUI();
 };
 

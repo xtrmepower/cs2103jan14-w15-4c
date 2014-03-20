@@ -1,5 +1,9 @@
 #include "MariaTime.h"
 
+const string MariaTime::timeSeparator = ":";
+const string MariaTime::timeMorning = " AM";
+const string MariaTime::timeEvening = " PM";
+
 const char * const MariaTime::DAYS[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 const char * const MariaTime::MONTHS[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November" , "December"};
 
@@ -144,6 +148,31 @@ MariaTime MariaTime::getCurrentTime() {
  //toReturn.timeStruct = *localtime ( &rawtime );
 	//toReturn.timeStruct.tm_year += YEAR_OFFSET;
 	return toReturn;
+}
+
+string MariaTime::convertTimeToString(MariaTime *time) {
+	string toReturn;
+
+	if(time->getHour()<12) {
+		toReturn=std::to_string(time->getHour())+timeSeparator;
+		if(time->getMin()<10) {
+			toReturn+="0";
+		}
+		toReturn+=std::to_string(time->getMin())+timeMorning;
+	} else {
+		toReturn=std::to_string(time->getHour()-12)+timeSeparator;
+		if(time->getMin()<10) {
+			toReturn+="0";
+		}
+		toReturn+=std::to_string(time->getMin())+timeEvening;
+	}
+
+	return toReturn;
+}
+
+
+int MariaTime::timeDifference(MariaTime *end, MariaTime *start) {
+	return (int)difftime(end->get(), start->get());
 }
 
 int MariaTime::compareTo(MariaTime other) {

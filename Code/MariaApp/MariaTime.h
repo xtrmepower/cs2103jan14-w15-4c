@@ -5,6 +5,10 @@ using namespace std;
 
 class MariaTime {
 public:
+	static const string timeSeparator;
+	static const string timeMorning;
+	static const string timeEvening;
+
 	static const int YEAR_OFFSET = 1900;
 	static const int MONTH_OFFSET = 1;
 	
@@ -39,6 +43,8 @@ public:
 	int compareTo(MariaTime other);
 
 	static MariaTime getCurrentTime();
+	static string convertTimeToString(MariaTime *time);
+	static int timeDifference(MariaTime *end, MariaTime *start);
 
 private:
 	time_t timeStamp;

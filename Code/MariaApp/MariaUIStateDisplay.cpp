@@ -11,16 +11,16 @@ MariaUIStateDisplay::MariaUIStateDisplay(QMainWindow* qmainWindow, MariaTaskMana
 }
 
 MariaUIStateDisplay::~MariaUIStateDisplay() {
-	clearTask();
+	clearUITask();
 }
 
-void MariaUIStateDisplay::updateNumber() {
+void MariaUIStateDisplay::updateUITaskNumber() {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->setTitlePretext(std::to_string(i + 1) + ". ");
 	}
 }
 
-MariaUITask* MariaUIStateDisplay::addTask(MariaTask *task, MariaUITask::DISPLAY_TYPE type) {
+MariaUITask* MariaUIStateDisplay::addUITask(MariaTask *task, MariaUITask::DISPLAY_TYPE type) {
 	MariaUITask *temp = new MariaUITask(_qmainWindow, task, _qmainWindow->width(), type);
 
 	temp->setPosition(QPointF(_qmainWindow->width(), _taskStartHeight + temp->getTaskHeight()*_taskStack.size()));
@@ -31,30 +31,34 @@ MariaUITask* MariaUIStateDisplay::addTask(MariaTask *task, MariaUITask::DISPLAY_
 	}
 
 	_taskStack.push_back(temp);
+	
+	updateGUI();
 
 	return temp;
 }
 
-void MariaUIStateDisplay::updateTask() {
+void MariaUIStateDisplay::updateUITask() {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->updateDetails();
 		_taskStack.at(i)->setDestination(QPointF(0.0, _taskStartHeight + _taskStack.at(i)->getTaskHeight()*i));
 	}
+	
+	updateGUI();
 }
 
-void MariaUIStateDisplay::updateTaskDestination(QPointF destination) {
+void MariaUIStateDisplay::updateUITaskDestination(QPointF destination) {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->setDestination(QPointF(destination.x(), destination.y() + _taskStack.at(i)->getTaskHeight()*i));
 	}
 }
 
-void MariaUIStateDisplay::updateTaskPosition(QPointF position) {
+void MariaUIStateDisplay::updateUITaskPosition(QPointF position) {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->setPosition(QPointF(position.x(), position.y() + _taskStack.at(i)->getTaskHeight()*i));
 	}
 }
 
-MariaUITask* MariaUIStateDisplay::eraseTask(int index) {
+MariaUITask* MariaUIStateDisplay::eraseUITask(int index) {
 	
 	assert(index<_taskStack.size());
 
@@ -65,11 +69,11 @@ MariaUITask* MariaUIStateDisplay::eraseTask(int index) {
 	temp->stopUpdatingTime();
 	_taskStack.erase(_taskStack.begin() + index);
 
-	updateTask();
+	updateUITask();
 	return temp;
 }
 
-MariaUITask* MariaUIStateDisplay::eraseTask(MariaTask* task) {
+MariaUITask* MariaUIStateDisplay::eraseUITask(MariaTask* task) {
 	MariaUITask* temp = NULL;
 	for (int i = 0; i < _taskStack.size(); i++ ) {
 		if (_taskStack[i]->getMariaTask() == task) {
@@ -81,11 +85,11 @@ MariaUITask* MariaUIStateDisplay::eraseTask(MariaTask* task) {
 		}
 	}
 
-	updateTask();
+	updateUITask();
 	return temp;
 }
 
-void MariaUIStateDisplay::eraseAllTask() {
+void MariaUIStateDisplay::eraseAllUITask() {
 	for (int i = 0; i < _taskStack.size(); i++ ) {
 		_taskStack.at(i)->setDestination(QPointF(-_qmainWindow->width()-TEXTBOX_X_OFFSET, _taskStartHeight + _taskStack.at(i)->getTaskHeight()*i));
 		_taskStack.at(i)->stopUpdatingTime();
@@ -97,7 +101,7 @@ void MariaUIStateDisplay::eraseAllTask() {
 	}
 }
 
-void MariaUIStateDisplay::clearTask() {
+void MariaUIStateDisplay::clearUITask() {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->stopUpdatingTime();
 		delete _taskStack.at(i);
@@ -117,7 +121,7 @@ void MariaUIStateDisplay::clearTask() {
 	}
 }
 
-int MariaUIStateDisplay::getTotalTask() {
+int MariaUIStateDisplay::getTotalUITask() {
 	return _taskStack.size();
 }
 
@@ -133,4 +137,8 @@ void MariaUIStateDisplay::updatePage() {
 	for( int i = 0 ; i < _taskStack.size() ; i++ ) {
 		_taskStack.at(i)->setDestination(QPointF(-_qmainWindow->width()-TEXTBOX_X_OFFSET, _taskStartHeight + _taskStack.at(i)->getTaskHeight()*(i-20*_page)));			
 	}
+}
+
+void MariaUIStateDisplay::updateGUI() {
+
 }

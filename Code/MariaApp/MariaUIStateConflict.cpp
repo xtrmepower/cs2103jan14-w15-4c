@@ -11,11 +11,11 @@ MariaUIStateConflict::MariaUIStateConflict(QMainWindow* qmainWindow, MariaTaskMa
 }
 
 MariaUIStateConflict::~MariaUIStateConflict() {
-	clearTask();
+	clearUITask();
 }
 
 void MariaUIStateConflict::initBeginState() {
-	clearTask();
+	clearUITask();
 
 	((MariaUI*)_qmainWindow)->getCommandBar()->setDestination(_qmainWindow->height()*TASKBAR_STARTHEIGHT_SCALE);
 	((MariaUI*)_qmainWindow)->setBackgroundColor(255, 0, 0);
@@ -24,13 +24,13 @@ void MariaUIStateConflict::initBeginState() {
 void MariaUIStateConflict::initActiveState() {
 	vector<MariaTask*> tempList = _taskManager->findTask(_conflictTaskTitle);
 	for(MariaTask* temp : tempList) {
-		addTask(temp, MariaUITask::DISPLAY_TYPE::EXPANDED);
+		addUITask(temp, MariaUITask::DISPLAY_TYPE::EXPANDED);
 	}
-	updateNumber();
+	updateUITaskNumber();
 }
 
 void MariaUIStateConflict::initEndState() {
-	eraseAllTask();
+	eraseAllUITask();
 }
 
 bool MariaUIStateConflict::timerBeginState() {
@@ -43,4 +43,7 @@ bool MariaUIStateConflict::timerActiveState() {
 
 bool MariaUIStateConflict::timerEndState() {
 	return false;
+}
+
+void MariaUIStateConflict::updateGUI() {
 }

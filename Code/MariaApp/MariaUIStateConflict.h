@@ -29,5 +29,7 @@ private:
 public:
 	MariaUIStateConflict(QMainWindow* qmainWindow, MariaTaskManager *taskManager, string conflictTaskTitle);
 	~MariaUIStateConflict();
+
+	void updateGUI();
 };
 
