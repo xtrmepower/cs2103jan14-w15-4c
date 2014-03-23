@@ -57,7 +57,7 @@ namespace MariaTest {
 		TEST_METHOD(Task_UndoOnce) {
 			MariaTaskManager* program = new MariaTaskManager();
 			program->addTask("Original Title");
-			program->notifyAction((*program->taskList)[0]);
+			//program->notifyAction((*program->taskList)[0]);
 			(*program->taskList)[0]->setTitle("New Title");
 			program->undoLast();
 			Assert::AreEqual((string)"Original Title",(*program->taskList)[0]->getTitle());

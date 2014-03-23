@@ -1,11 +1,17 @@
 #pragma once
 
+#include <functional>
 #include <string>
 #include "MariaTime.h"
+#include "MariaTaskManager.h"
 using namespace std;
+
+
 
 class MariaTask{
 public:
+	typedef void (MariaTaskManager::*notifyAction)(MariaTask*, bool);
+	typedef std::function<void(MariaTask*, bool)> observerFunction;
 	typedef enum {
 		FLOATING, 
 		DEADLINE, 
@@ -34,6 +40,8 @@ public:
 	void refreshTaskType();
 
 	bool operator<(MariaTask rhs);
+	static void initObserver(notifyAction observerFunc);
+	static notifyAction notifyObserver;
 
 private:
 	TaskType	type;
@@ -41,4 +49,5 @@ private:
 	string		description;
 	MariaTime*	start;
 	MariaTime*	end;
+
 };

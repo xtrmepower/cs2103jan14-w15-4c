@@ -71,6 +71,7 @@ string MariaTask::getTimeFromNow() {
 }
 
 void MariaTask::setTitle(string title) {
+	notifyObserver(this, false);
 	this->title = title;
 }
 
@@ -112,4 +113,8 @@ bool MariaTask::operator<(MariaTask rhs) {
 		return type < getType();
 	}
 	
+}
+
+void MariaTask::initObserver(notifyAction observerFunc) {
+	//notifyObserver = (observerFunc);
 }
