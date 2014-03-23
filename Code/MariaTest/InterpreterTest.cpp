@@ -6,6 +6,22 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 namespace MariaTest {
 	TEST_CLASS(Interpreter) {
 	public:
+		TEST_METHOD(Interpreter_EmptyInput) {
+			MariaInterpreter* program = new MariaInterpreter();
+
+			string input = "";
+
+			MariaInputObject* output = program->parseInput(input);
+
+			Assert::IsTrue(output->getCommandType() == MariaInputObject::CommandInvalid);
+
+			delete output;
+			output = NULL;
+
+			delete program;
+			program = NULL;
+		}
+
 		TEST_METHOD(Interpreter_AddFloatingTask) {
 			MariaInterpreter* program = new MariaInterpreter();
 

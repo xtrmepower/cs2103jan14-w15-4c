@@ -37,7 +37,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 	// Check that we are in the correct state.
 	//assert(currentState == MariaStateManager::STATE_TYPE::HOME);
 
-	if (inputString.size() < 0) {
+	if (inputString.size() == 0) {
 		inputObject->setValidity(false);
 		// Empty input!
 		return inputObject;
