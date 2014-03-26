@@ -244,32 +244,32 @@ bool MariaLogic::processCommand(std::string inputText) {
 		// Show today, tomorrow, date
 		// Date object is obtained through input->getEndTime();
 		//Miki data object cannot be reference. Crashes here.
-		MariaTime startTime=*(input->getEndTime());
-		startTime.setHour(0);
-		startTime.setMin(0);
-		MariaTime endTime=*(input->getEndTime());
-		endTime.setHour(23);
-		endTime.setMin(59);
-		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(&startTime,&endTime);
+		MariaTime* startTime = new MariaTime(*input->getEndTime());
+		startTime->setHour(0);
+		startTime->setMin(0);
+		MariaTime* endTime = new MariaTime(*input->getEndTime());
+		endTime->setHour(23);
+		endTime->setMin(59);
+		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
 
-		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have on " + MariaTime::convertToDateString(&endTime) + ".");
-		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(&startTime), listOfTasks));
+		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have on " + MariaTime::convertToDateString(endTime) + ".");
+		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
 		mariaStateManager->transitState();
 	}
 	break;
 	case MariaInputObject::COMMAND_TYPE::SHOW_DATE_RANGE: {
 		// Show from start date to end date
 		//Miki data object cannot be reference. Crashes here.
-		MariaTime startTime=*(input->getStartTime());
-		startTime.setHour(0);
-		startTime.setMin(0);
-		MariaTime endTime=*(input->getEndTime());
-		endTime.setHour(23);
-		endTime.setMin(59);
-		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(&startTime,&endTime);
+		MariaTime* startTime = new MariaTime(*input->getStartTime());
+		startTime->setHour(0);
+		startTime->setMin(0);
+		MariaTime* endTime = new MariaTime(*input->getEndTime());
+		endTime->setHour(23);
+		endTime->setMin(59);
+		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
 			
-		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have from " + MariaTime::convertToDateString(&startTime) + " to " + MariaTime::convertToDateString(&endTime) + ".");
-		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(&startTime), listOfTasks));
+		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have from " + MariaTime::convertToDateString(startTime) + " to " + MariaTime::convertToDateString(endTime) + ".");
+		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
 		mariaStateManager->transitState();
 	}
 	break;

@@ -42,7 +42,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 	MariaInputObject* inputObject = new MariaInputObject();
 
 	// Check that we are in the correct state.
-	assert(currentState == MariaStateManager::STATE_TYPE::HOME || currentState == MariaStateManager::STATE_TYPE::CONFLICT);
+	//assert(currentState == MariaStateManager::STATE_TYPE::HOME || currentState == MariaStateManager::STATE_TYPE::CONFLICT);
 
 	if (inputString.size() == 0) {
 		inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::INVALID);
@@ -65,7 +65,6 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 		} else {
 			// Command keyword recognized! Set it!
 			inputObject->setCommandType(commandKeyword->second);
-
 			tokenizedInput.erase(tokenizedInput.begin());
 
 			switch (inputObject->getCommandType()) {
@@ -120,6 +119,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 					tokenizedInput.push_back("today");
 					timeList = this->parseDateTimeString(tokenizedInput);
 					inputObject->setEndTime(timeList[0]);
+					inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE);
 				} else if (tokenizedInput.size() == 1 && isStringMatch(tokenizedInput[0], "all")) {
 					inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_ALL);
 				} else if (tokenizedInput.size() == 1 && (isStringToday(tokenizedInput[0]) || isStringTomorrow(tokenizedInput[0]))) {
@@ -176,7 +176,6 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 		} else {
 			// Command keyword recognized.
 			inputObject->setCommandType(commandKeyword->second);
-
 			tokenizedInput.erase(tokenizedInput.begin());
 
 			switch (inputObject->getCommandType()) {
@@ -201,6 +200,45 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 					inputObject->setOptionID(atoi(tokenizedInput[0].c_str()));
 				} else {
 					inputObject->setTitle(this->getTitle(tokenizedInput));
+				}
+				break;
+			}
+		}
+	} else if (currentState == MariaStateManager::STATE_TYPE::SHOW) {
+		commandKeyword = commandKeywordList->find(lowercaseString(tokenizedInput[0]));
+
+		if (commandKeyword == commandKeywordList->end()) {
+			// Command keyword not recognized.
+			inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::INVALID);
+		} else {
+			// Command keyword recognized! Set it!
+			inputObject->setCommandType(commandKeyword->second);
+			tokenizedInput.erase(tokenizedInput.begin());
+
+			switch (inputObject->getCommandType()) {
+				case MariaInputObject::COMMAND_TYPE::SHOW:
+				if (tokenizedInput.size() == 0) {
+					tokenizedInput.push_back("today");
+					timeList = this->parseDateTimeString(tokenizedInput);
+					inputObject->setEndTime(timeList[0]);
+					inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE);
+				} else if (tokenizedInput.size() == 1 && isStringMatch(tokenizedInput[0], "all")) {
+					inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_ALL);
+				} else if (tokenizedInput.size() == 1 && (isStringToday(tokenizedInput[0]) || isStringTomorrow(tokenizedInput[0]))) {
+					inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE);
+					timeList = this->parseDateTimeString(tokenizedInput);
+				} else {
+					//TODO: Check if the string here is even valid
+					timeList = this->parseDateTimeString(tokenizedInput);
+
+					if (timeList.size() <= 1) {
+						inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE);
+						inputObject->setEndTime(timeList[0]);
+					} else if (timeList.size() == 2) {
+						inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE_RANGE);
+						inputObject->setStartTime(timeList[0]);
+						inputObject->setEndTime(timeList[1]);
+					}
 				}
 				break;
 			}

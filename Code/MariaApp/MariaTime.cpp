@@ -190,7 +190,7 @@ string MariaTime::convertToTimeString(MariaTime *time) {
 string MariaTime::convertToDateString(MariaTime *time) {
 	string toReturn;
 	toReturn+=to_string(time->getDay())+dateSeparator;
-	toReturn+=MONTHS[time->getMonth()]+dateSeparator;
+	toReturn+=MONTHS[time->getMonth()-1]+dateSeparator;
 	toReturn+=to_string(time->getYear());
 	return toReturn;
 }

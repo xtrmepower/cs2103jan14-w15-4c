@@ -183,6 +183,36 @@ namespace MariaTest {
 			program = NULL;
 		}
 
+		TEST_METHOD(Interpreter_ParseDateToday) {
+			MariaInterpreter* program = new MariaInterpreter();
+
+			int year, month, day;
+
+			program->parseDate("today", year, month, day);
+			Assert::AreEqual(MariaTime::getCurrentTime().getYear(), year);
+			Assert::AreEqual(MariaTime::getCurrentTime().getMonth(), month);
+			Assert::AreEqual(MariaTime::getCurrentTime().getDay(), day);
+
+			delete program;
+			program = NULL;
+		}
+
+		TEST_METHOD(Interpreter_ParseDateTomorrow) {
+			MariaInterpreter* program = new MariaInterpreter();
+
+			int year, month, day;
+
+			program->parseDate("tomorrow", year, month, day);
+			Assert::AreEqual(MariaTime::getCurrentTime().getYear(), year);
+			Assert::AreEqual(MariaTime::getCurrentTime().getMonth(), month);
+			Assert::AreEqual(MariaTime::getCurrentTime().getDay()+1, day);
+
+			// NOTE: Does not account for end of month scenario.
+
+			delete program;
+			program = NULL;
+		}
+
 		TEST_METHOD(Interpreter_ParseDate) {
 			MariaInterpreter* program = new MariaInterpreter();
 
@@ -240,31 +270,64 @@ namespace MariaTest {
 			program = NULL;
 		}
 
-		TEST_METHOD(Interpreter_ParseDateToday) {
+		TEST_METHOD(Interpreter_ParseDateBoundary) {
 			MariaInterpreter* program = new MariaInterpreter();
 
-			int year, month, day;
+			int expectedYear;
+			int expectedMonth;
+			int expectedDay;
+			vector<string> input;
+			MariaTime* output = NULL;
 
-			program->parseDate("today", year, month, day);
-			Assert::AreEqual(MariaTime::getCurrentTime().getYear(), year);
-			Assert::AreEqual(MariaTime::getCurrentTime().getMonth(), month);
-			Assert::AreEqual(MariaTime::getCurrentTime().getDay(), day);
+			expectedYear = 1900;
+			expectedMonth = 12;
+			expectedDay = 12;
+			input.push_back("12/12/1900");
+			output = program->parseDateTimeString(input)[0];
+			Assert::AreEqual(expectedYear, output->getYear());
+			Assert::AreEqual(expectedMonth, output->getMonth());
+			Assert::AreEqual(expectedDay, output->getDay());
+			input.clear();
 
-			delete program;
-			program = NULL;
-		}
+			expectedYear = 2038;
+			expectedMonth = 1;
+			expectedDay = 20;
+			input.push_back("20/01/2038");
+			output = program->parseDateTimeString(input)[0];
+			Assert::AreEqual(expectedYear, output->getYear());
+			Assert::AreEqual(expectedMonth, output->getMonth());
+			Assert::AreEqual(expectedDay, output->getDay());
+			input.clear();
 
-		TEST_METHOD(Interpreter_ParseDateTomorrow) {
-			MariaInterpreter* program = new MariaInterpreter();
+			expectedYear = 2000;
+			expectedMonth = 2;
+			expectedDay = 1;
+			input.push_back("32/01/2000");
+			output = program->parseDateTimeString(input)[0];
+			Assert::AreEqual(expectedYear, output->getYear());
+			Assert::AreEqual(expectedMonth, output->getMonth());
+			Assert::AreEqual(expectedDay, output->getDay());
+			input.clear();
 
-			int year, month, day;
+			expectedYear = 2014;
+			expectedMonth = 3;
+			expectedDay = 2;
+			input.push_back("30/02/2014");
+			output = program->parseDateTimeString(input)[0];
+			Assert::AreEqual(expectedYear, output->getYear());
+			Assert::AreEqual(expectedMonth, output->getMonth());
+			Assert::AreEqual(expectedDay, output->getDay());
+			input.clear();
 
-			program->parseDate("tomorrow", year, month, day);
-			Assert::AreEqual(MariaTime::getCurrentTime().getYear(), year);
-			Assert::AreEqual(MariaTime::getCurrentTime().getMonth(), month);
-			Assert::AreEqual(MariaTime::getCurrentTime().getDay()+1, day);
-
-			// NOTE: Does not account for end of month scenario.
+			expectedYear = 2012;
+			expectedMonth = 3;
+			expectedDay = 1;
+			input.push_back("30/02/2012");
+			output = program->parseDateTimeString(input)[0];
+			Assert::AreEqual(expectedYear, output->getYear());
+			Assert::AreEqual(expectedMonth, output->getMonth());
+			Assert::AreEqual(expectedDay, output->getDay());
+			input.clear();
 
 			delete program;
 			program = NULL;
@@ -294,6 +357,41 @@ namespace MariaTest {
 			expectedMin = 37;
 
 			program->parseTime("937", hour, min);
+			Assert::AreEqual(expectedHour, hour);
+			Assert::AreEqual(expectedMin, min);
+
+			delete program;
+			program = NULL;
+		}
+
+		TEST_METHOD(Interpreter_ParseTimeBoundary) {
+			MariaInterpreter* program = new MariaInterpreter();
+
+			int expectedHour;
+			int expectedMin;
+			int hour, min;
+
+			expectedHour = 0;
+			expectedMin = 0;
+			program->parseTime("-1:-1", hour, min);
+			Assert::AreEqual(expectedHour, hour);
+			Assert::AreEqual(expectedMin, min);
+
+			expectedHour = 23;
+			expectedMin = 59;
+			program->parseTime("24:00", hour, min);
+			Assert::AreEqual(expectedHour, hour);
+			Assert::AreEqual(expectedMin, min);
+
+			expectedHour = 0;
+			expectedMin = 1;
+			program->parseTime("0:01", hour, min);
+			Assert::AreEqual(expectedHour, hour);
+			Assert::AreEqual(expectedMin, min);
+
+			expectedHour = 23;
+			expectedMin = 59;
+			program->parseTime("23:59", hour, min);
 			Assert::AreEqual(expectedHour, hour);
 			Assert::AreEqual(expectedMin, min);
 

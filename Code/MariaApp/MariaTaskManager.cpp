@@ -53,6 +53,10 @@ vector<MariaTask*> MariaTaskManager::findTask(MariaTime* start, MariaTime* end) 
 	vector<MariaTask*> returnList;
 
 	for(MariaTask* temp : *taskList) {
+		if (temp->getEnd() == NULL) {
+			continue;
+		}
+
 		if(temp->getEnd()->get() >= start->get() && temp->getEnd()->get() <= end->get()) {
 			returnList.push_back(temp);
 		}
