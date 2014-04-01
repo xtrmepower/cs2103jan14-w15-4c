@@ -4,6 +4,8 @@ MariaTask::MariaTask(string title, MariaTime* start, MariaTime* end) {
 	this->title = title;
 	this->start = start;
 	this->end = end;
+
+	this->created = new MariaTime(MariaTime::getCurrentTime());
 	
 	refreshTaskType();
 }
@@ -13,6 +15,8 @@ MariaTask::MariaTask(string title, string description, MariaTime* start, MariaTi
 	this->description = description;
 	this->start = start;
 	this->end = end;
+
+	this->created = new MariaTime(MariaTime::getCurrentTime());
 	
 	refreshTaskType();
 }
@@ -40,6 +44,10 @@ MariaTime* MariaTask::getStart() {
 
 MariaTime* MariaTask::getEnd() {
 	return end;
+}
+
+MariaTime* MariaTask::getCreated() {
+	return created;
 }
 
 double MariaTask::getDuration() {
@@ -102,6 +110,11 @@ void MariaTask::setEnd(MariaTime* end) {
 	refreshTaskType();
 }
 
+void MariaTask::setCreated(MariaTime* created) {
+	delete this->created;
+	this->created = created;
+}
+
 void MariaTask::refreshTaskType() {
 	if(start == NULL && end == NULL) {
 		type = TaskType::FLOATING;
@@ -128,14 +141,8 @@ bool MariaTask::operator<(MariaTask rhs) {
 	
 }
 
-//void MariaTask::initObserver(notifyAction observerFunc) {
-//	//notifyObserver = (observerFunc);
-//}
-
-void MariaTask::initObserver(MariaUndoObserver* observer){
-	//MariaTask::observer = observer;
-	//MariaUndoObserver* observer2 = observer;
-	//this->observer = observer;
+void MariaTask::initObserver(MariaUndoObserver* observer) {
 	MariaTask::observer = observer;
 }
+
 MariaUndoObserver *MariaTask::observer = NULL;

@@ -26,6 +26,7 @@ public:
 	string getTimeFromNow();
 	MariaTime* getStart();
 	MariaTime* getEnd();
+	MariaTime* getCreated();
 	double getDuration();
 	MariaTask* getClone();
 	
@@ -33,6 +34,7 @@ public:
 	void setDescription(string);
 	void setStart(MariaTime*);
 	void setEnd(MariaTime*);
+	void setCreated(MariaTime*);
 
 	void refreshTaskType();
 
@@ -47,6 +49,7 @@ private:
 	string		description;
 	MariaTime*	start;
 	MariaTime*	end;
+	MariaTime*	created;
 
 	static MariaUndoObserver *observer;
 };

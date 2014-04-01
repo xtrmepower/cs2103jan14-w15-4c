@@ -8,12 +8,13 @@ class MariaFileManager
 {
 public:
 	static const string INPUT_FILE;
-	static const int ATTRIBUTES_PER_TASK = 6;
+	static const int ATTRIBUTES_PER_TASK = 7;
 	static const string TASK_OPEN_FIELD;
 	static const string TASK_TITLE_FIELD;
 	static const string TASK_DESC_FIELD;
 	static const string TASK_STARTTIME_FIELD;
 	static const string TASK_ENDTIME_FIELD;
+	static const string TASK_CREATED_FIELD;
 	static const string TASK_CLOSE_FIELD;
 	static const char NEW_LINE = '\n';
 	static const string TIME_FORMAT;

@@ -6,6 +6,7 @@ const string MariaFileManager::TASK_TITLE_FIELD = "\t[Title]";
 const string MariaFileManager::TASK_DESC_FIELD = "\t[Desc]";
 const string MariaFileManager::TASK_STARTTIME_FIELD = "\t[Start]";
 const string MariaFileManager::TASK_ENDTIME_FIELD = "\t[End]";
+const string MariaFileManager::TASK_CREATED_FIELD = "\t[Created]";
 const string MariaFileManager::TASK_CLOSE_FIELD = "[End Task]";
 const string MariaFileManager::TIME_FORMAT = "%Y-%m-%d %H:%M:%S";
 
@@ -60,10 +61,13 @@ vector<MariaTask*>* MariaFileManager::readFile(ifstream *fileReader) {
 
 	while(true) {
 		string lineRead;
-		string inputText[ATTRIBUTES_PER_TASK];
+		string inputText[ATTRIBUTES_PER_TASK] = {""};
 
 		for( int i = 0; i< ATTRIBUTES_PER_TASK; i++ ) {
 			if(getline (*fileReader, lineRead)) {
+				if(lineRead == TASK_CLOSE_FIELD) {
+					break;
+				}
 				inputText[i] = lineRead;
 			} else {
 				fileReader->close();
@@ -93,6 +97,8 @@ MariaTask* MariaFileManager::stringToTask(string inputText[]) {
 			newTask->setStart(stringToTime(value));
 		} else if (field == TASK_ENDTIME_FIELD) {
 			newTask->setEnd(stringToTime(value));
+		} else if (field == TASK_CREATED_FIELD) {
+			newTask->setCreated(stringToTime(value));
 		}
 		
 	}
@@ -115,6 +121,7 @@ string MariaFileManager::taskToString(MariaTask *task) {
 							TASK_DESC_FIELD		 + task->getDescription()			 + NEW_LINE + 
 							TASK_STARTTIME_FIELD + timeToString(task->getStart())	 + NEW_LINE + 
 							TASK_ENDTIME_FIELD	 + timeToString(task->getEnd())		 + NEW_LINE + 
+							TASK_CREATED_FIELD	 + timeToString(task->getCreated())	 + NEW_LINE +
 							TASK_CLOSE_FIELD + NEW_LINE;
 
 	return returnString;
