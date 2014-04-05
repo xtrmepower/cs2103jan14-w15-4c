@@ -7,8 +7,9 @@
 #include <functional>
 #include <regex>
 #include <exception>
+#include <cassert>
 #include "MariaInputObject.h"
-#include "MariaStateManager.h"
+#include "MariaUIStateType.h"
 using namespace std;
 
 /**
@@ -33,7 +34,7 @@ public:
 	/// @param	inputString		This be the user's input.
 	///
 	/// @return	This be the magical object that holds the answer to everything...
-	MariaInputObject* parseInput(string inputString, MariaStateManager::STATE_TYPE currentState = MariaStateManager::STATE_TYPE::HOME);
+	MariaInputObject* parseInput(string inputString, STATE_TYPE currentState = STATE_TYPE::HOME);
 
 #ifdef _DEBUG
 public:

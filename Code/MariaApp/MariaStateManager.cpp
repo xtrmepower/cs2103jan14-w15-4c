@@ -118,7 +118,7 @@ void MariaStateManager::transitState() {
 	}
 }
 
-MariaStateManager::STATE_TYPE MariaStateManager::getCurrentState() {
+STATE_TYPE MariaStateManager::getCurrentState() {
 	return _currentState;
 }
 

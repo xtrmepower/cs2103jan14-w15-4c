@@ -116,7 +116,7 @@ MariaUITask* MariaUIStateDisplay::eraseUITask(int index) {
 	temp->stopUpdatingTime();
 	_taskStack.erase(_taskStack.begin() + index);
 
-	setPage(index/_maxTaskDisplay);
+	setPage(0);
 	updateTitleText();
 	updateUITask();
 	updatePage();

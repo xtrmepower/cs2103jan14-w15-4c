@@ -25,12 +25,12 @@ MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	mariaStateManager = new MariaStateManager();
 
 	MariaUIStateLoading *temp = new MariaUIStateLoading((QMainWindow*)mariaUI);
-	mariaStateManager->queueState(MariaStateManager::LOADING, temp);
+	mariaStateManager->queueState(STATE_TYPE::LOADING, temp);
 	temp->setDisplayText("Loading");
 	temp->setLoadingDone();
 
 
-	mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+	mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 	mariaUI->getCommandBar()->getTextbox()->setQuestionText("How can I help you?");
 	mariaUI->getCommandBar()->getTextbox()->setSuggestText("create Meeting tomorrow for discussion");
 
@@ -74,7 +74,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 	break;
 	case MariaInputObject::COMMAND_TYPE::EXIT: {
 		MariaUIStateLoading *temp = new MariaUIStateLoading((QMainWindow*)mariaUI);
-		mariaStateManager->queueState(MariaStateManager::LOADING, temp);
+		mariaStateManager->queueState(STATE_TYPE::LOADING, temp);
 		temp->setDisplayText("Saving");
 		temp->setLoadingDone();
 		temp->setQuitAfterLoadingTrue();
@@ -85,7 +85,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), NULL, NULL);
 		if(toAdd != NULL) {
 			mariaUI->getCommandBar()->getTextbox()->setQuestionText("Task '" + input->getTitle() + "' has been added!");
-			if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+			if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 				((MariaUIStateHome*)currentObj)->addUITask(toAdd, MariaUITask::DISPLAY_TYPE::NORMAL);
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 			}
@@ -98,7 +98,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), NULL, new MariaTime(*input->getEndTime()));
 		if(toAdd != NULL) {
 			mariaUI->getCommandBar()->getTextbox()->setQuestionText("Task '" + input->getTitle() + "' has been added!");
-			if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+			if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 				((MariaUIStateHome*)currentObj)->addUITask(toAdd, MariaUITask::DISPLAY_TYPE::NORMAL);
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 			}
@@ -111,7 +111,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), new MariaTime(*input->getStartTime()), new MariaTime(*input->getEndTime()));
 		if(toAdd != NULL) {
 			mariaUI->getCommandBar()->getTextbox()->setQuestionText("Task '" + input->getTitle() + "' has been added!");
-			if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+			if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 				((MariaUIStateHome*)currentObj)->addUITask(toAdd, MariaUITask::DISPLAY_TYPE::NORMAL);
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 			}
@@ -124,7 +124,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		string toEditTitle = input->getTitle();
 
 		//Jay: Pending splitting up of conflict and non conflict.
-		if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::CONFLICT) {
+		if(mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
 			int numberToEdit = input->getOptionID();
 			MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
 			if(numberToEdit > 0 && numberToEdit <= tempObj->getTotalUITask()) {
@@ -134,14 +134,14 @@ bool MariaLogic::processCommand(std::string inputText) {
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Ok, I have updated the title.");
-				mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+				mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 				mariaStateManager->transitState();					
 			}
 		} else {
 			vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(toEditTitle);
 
 			if (listOfTasks.size() == 1) {
-				if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+				if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 					listOfTasks[0]->setTitle(input->getEditField());
 					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
@@ -154,7 +154,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			} else {
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I edit?");
 
-				mariaStateManager->queueState(MariaStateManager::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
+				mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
 				mariaStateManager->transitState();
 			}
 		}
@@ -164,7 +164,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		string toEditTitle = input->getTitle();
 		
 		//Jay: Pending splitting up of conflict and non conflict.
-		if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::CONFLICT) {
+		if(mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
 			int numberToEdit = input->getOptionID();
 			MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
 			if(numberToEdit > 0 && numberToEdit <= tempObj->getTotalUITask()) {
@@ -173,7 +173,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Consider it done!");
-				mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+				mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 				mariaStateManager->transitState();
 			}
 		} else {
@@ -182,7 +182,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			if (listOfTasks.size() == 1) {
 				//Jay: To do, change it to just check if currentObj is a stateDisplay and call updateUI, if not
 				//still enable updating but no visual cues.
-				if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+				if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 					listOfTasks[0]->setStart(new MariaTime(*input->getEditTime()));
 					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
@@ -195,7 +195,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			} else {
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I edit?");
 
-				mariaStateManager->queueState(MariaStateManager::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
+				mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
 				mariaStateManager->transitState();
 			}
 		}
@@ -205,7 +205,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		string toEditTitle = input->getTitle();
 
 		//Jay: Pending removal of check if its in conflict state.
-		if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::CONFLICT) {
+		if(mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
 			int numberToEdit = input->getOptionID();
 			MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
 			if(numberToEdit > 0 && numberToEdit <= tempObj->getTotalUITask()) {
@@ -214,7 +214,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Consider it done.");
-				mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+				mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 				mariaStateManager->transitState();
 			}
 		} else {
@@ -223,7 +223,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			if (listOfTasks.size() == 1) {
 				//Jay: To do, change it to just check if currentObj is a stateDisplay and call updateUI, if not
 				//still enable updating but no visual cues.
-				if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+				if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 					listOfTasks[0]->setEnd(new MariaTime(*input->getEditTime()));
 					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
@@ -236,7 +236,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 			} else {
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I edit?");
 
-				mariaStateManager->queueState(MariaStateManager::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
+				mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
 				mariaStateManager->transitState();
 			}
 		}
@@ -255,7 +255,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
 
 		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have on " + MariaTime::convertToDateString(endTime) + ".");
-		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
+		mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
 		mariaStateManager->transitState();
 	}
 	break;
@@ -271,7 +271,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
 			
 		mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have from " + MariaTime::convertToDateString(startTime) + " to " + MariaTime::convertToDateString(endTime) + ".");
-		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
+		mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, MariaTime::convertToDateString(startTime), listOfTasks));
 		mariaStateManager->transitState();
 	}
 	break;
@@ -279,7 +279,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 		vector<MariaTask*> listOfTasks = mariaTaskManager->getAllTasks();
 
 		mariaUI->getCommandBar()->getTextbox()->setQuestionText("Sure, here are all the tasks.");
-		mariaStateManager->queueState(MariaStateManager::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, "All Tasks", listOfTasks));
+		mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, mariaTaskManager, "All Tasks", listOfTasks));
 		mariaStateManager->transitState();
 	}
 	break;
@@ -292,7 +292,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 	case MariaInputObject::COMMAND_TYPE::DELETE_TASK: {
 		string toDeleteTitle = input->getTitle();
 
-		if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::CONFLICT) {
+		if(mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
 			int numberToDelete = input->getOptionID();
 			MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
 
@@ -302,14 +302,14 @@ bool MariaLogic::processCommand(std::string inputText) {
 				mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Resolved! Anything else?");
-				mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+				mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 				mariaStateManager->transitState();
 			}
 		} else {
 			vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(toDeleteTitle);
 
 			if (listOfTasks.size() == 1) {
-				if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+				if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 					mariaTaskManager->archiveTask(listOfTasks[0]);
 					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
 					mariaUI->getCommandBar()->getTextbox()->setQuestionText("'" + toDeleteTitle + "' has been deleted!");
@@ -320,14 +320,14 @@ bool MariaLogic::processCommand(std::string inputText) {
 			} else {
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I remove?");
 
-				mariaStateManager->queueState(MariaStateManager::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toDeleteTitle));
+				mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toDeleteTitle));
 				mariaStateManager->transitState();
 			}
 		}
 	}
 	break;
 	case MariaInputObject::COMMAND_TYPE::DELETE_ALL: {
-		if(mariaStateManager->getCurrentState() == MariaStateManager::STATE_TYPE::HOME) {
+		if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
 			vector<MariaTask*> listOfTasks = mariaTaskManager->getAllTasks();
 			for (int i = 0; i < listOfTasks.size(); i++ ) {
 				mariaTaskManager->archiveTask(listOfTasks[i]);
@@ -349,7 +349,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 	break;
 	case MariaInputObject::COMMAND_TYPE::GO_HOME: {
 		mariaUI->getCommandBar()->getTextbox()->setQuestionText("How can I help you?");
-		mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+		mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 		mariaStateManager->transitState();
 	}
 	break;
@@ -392,7 +392,7 @@ bool MariaLogic::processCommand(std::string inputText) {
 	break;
 	default:
 		mariaUI->getCommandBar()->getTextbox()->setQuestionText("It's a valid command, but I'm limited.");
-		mariaStateManager->queueState(MariaStateManager::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+		mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
 		mariaStateManager->transitState();
 	break;
 	}

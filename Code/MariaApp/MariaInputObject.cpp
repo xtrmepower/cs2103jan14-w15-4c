@@ -57,7 +57,7 @@ void MariaInputObject::setEditTime(MariaTime* newEditTime) {
 	_editTime = newEditTime;
 }
 
-void MariaInputObject::setStateType(MariaStateManager::STATE_TYPE newStateType) {
+void MariaInputObject::setStateType(STATE_TYPE newStateType) {
 	_stateType = newStateType;
 }
 
@@ -93,6 +93,6 @@ MariaTime* MariaInputObject::getEditTime() const {
 	return _editTime;
 }
 
-MariaStateManager::STATE_TYPE MariaInputObject::getStateType() const {
+STATE_TYPE MariaInputObject::getStateType() const {
 	return _stateType;
 }

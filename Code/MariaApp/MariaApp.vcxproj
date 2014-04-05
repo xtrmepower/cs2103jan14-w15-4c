@@ -251,6 +251,7 @@
     <ClInclude Include="MariaInputObject.h" />
     <ClInclude Include="MariaInterpreter.h" />
     <ClInclude Include="MariaLogic.h" />
+    <ClInclude Include="MariaUIStateType.h" />
     <ClInclude Include="MariaUndoObserver.h" />
     <CustomBuild Include="MariaStateManager.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

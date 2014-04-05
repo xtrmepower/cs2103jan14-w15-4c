@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MariaTime.h"
-#include "MariaStateManager.h"
+#include "MariaUIStateType.h"
 
 class MariaInputObject {
 public:
@@ -45,7 +45,7 @@ public:
 	void setStartTime(MariaTime* newStartTime);
 	void setEndTime(MariaTime* newEndTime);
 	void setEditTime(MariaTime* newEditTime);
-	void setStateType(MariaStateManager::STATE_TYPE newStateType);
+	void setStateType(STATE_TYPE newStateType);
 
 	string getOriginalInput() const;
 	COMMAND_TYPE getCommandType() const;
@@ -55,11 +55,11 @@ public:
 	MariaTime* getStartTime() const;
 	MariaTime* getEndTime() const;
 	MariaTime* getEditTime() const;
-	MariaStateManager::STATE_TYPE getStateType() const;
+	STATE_TYPE getStateType() const;
 
 private:
 	COMMAND_TYPE _commandType;
-	MariaStateManager::STATE_TYPE _stateType;
+	STATE_TYPE _stateType;
 
 	string _originalInput;
 	string _title;

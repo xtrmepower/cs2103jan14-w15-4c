@@ -4,22 +4,12 @@
 #include <QtCore/QTimer>
 #include <QtWidgets/QMainWindow>
 #include "MariaStateObject.h"
+#include "MariaUIStateType.h"
 
 class MariaStateManager : public QWidget {
 	 Q_OBJECT
 
 public:
-	typedef enum {
-		BLANK, 
-		HOME, 
-		SHOW, 
-		EDIT, 
-		SETTING, 
-		CONFLICT, 
-		LOADING, 
-		QUIT
-	} STATE_TYPE;
-
 	typedef enum {
 		BEGIN, 
 		ACTIVE, 

@@ -129,6 +129,9 @@
       <Filter>User Interface\States</Filter>
     </ClInclude>
     <ClInclude Include="MariaUndoObserver.h" />
+    <ClInclude Include="MariaUIStateType.h">
+      <Filter>User Interface\States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MariaStateManager.h" />

@@ -38,7 +38,7 @@ MariaInterpreter::~MariaInterpreter(void){
 	}
 }
 
-MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateManager::STATE_TYPE currentState) {
+MariaInputObject* MariaInterpreter::parseInput(string inputString, STATE_TYPE currentState) {
 	MariaInputObject* inputObject = new MariaInputObject();
 
 	// Check that we are in the correct state.
@@ -55,7 +55,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 	vector<MariaTime*> timeList;
 	string title = "";
 
-	if (currentState == MariaStateManager::STATE_TYPE::HOME || currentState == MariaStateManager::STATE_TYPE::SHOW) {
+	if (currentState == STATE_TYPE::HOME || currentState == STATE_TYPE::SHOW) {
 		// Check for command keyword.
 		commandKeyword = commandKeywordList->find(lowercaseString(tokenizedInput[0]));
 
@@ -158,7 +158,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 				break;
 			}
 		}
-	} else if (currentState == MariaStateManager::STATE_TYPE::CONFLICT) {
+	} else if (currentState == STATE_TYPE::CONFLICT) {
 		// Check for command keyword.
 		commandKeyword = commandKeywordList->find(tokenizedInput[0]);
 
@@ -204,7 +204,7 @@ MariaInputObject* MariaInterpreter::parseInput(string inputString, MariaStateMan
 				break;
 			}
 		}
-	} else if (currentState == MariaStateManager::STATE_TYPE::SHOW) {
+	} else if (currentState == STATE_TYPE::SHOW) {
 		commandKeyword = commandKeywordList->find(lowercaseString(tokenizedInput[0]));
 
 		if (commandKeyword == commandKeywordList->end()) {
