@@ -194,6 +194,24 @@ int MariaUIStateDisplay::getTotalUITask() {
 	return _taskStack.size();
 }
 
+bool MariaUIStateDisplay::isAllTaskAtLocation() {
+	bool toReturn = true;
+	
+	int maxShown = _taskStack.size() - _page*_maxTaskDisplay;
+	if(maxShown > _maxTaskDisplay) {
+		maxShown = _maxTaskDisplay;
+	}
+
+	//Only task that are visible are checked.
+	for( int i = _page*_maxTaskDisplay ; i < _page*_maxTaskDisplay + maxShown ; i++ ) {
+		if(!_taskStack.at(i)->isAtLocation()) {
+			toReturn = false;
+			break;
+		}
+	}
+	return toReturn;
+}
+
 void MariaUIStateDisplay::setPage(int page) {
 	_page = page;
 }

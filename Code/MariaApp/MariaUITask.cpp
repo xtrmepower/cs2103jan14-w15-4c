@@ -46,6 +46,7 @@ MariaUITask::MariaUITask(QMainWindow *qmainWindow, MariaTask *task, float width,
 	_completed = NULL;
 
 	_active = false;
+	_atLocation = false;
 
 	_updatePositionTimer = NULL;
 	_updateTimeTextTimer = NULL;
@@ -59,7 +60,7 @@ void MariaUITask::setDisplayTitle() {
 
 	_displayTitle = new QLabel(_qmainWindow);
 	_displayTitle->setAlignment(Qt::AlignLeft);
-	_displayTitle->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_displayTitle->setGeometry(-_qmainWindow->width(),0,0,0);
 	_displayTitle->hide();
 
 	switch(_currentType) {
@@ -78,7 +79,7 @@ void MariaUITask::setDisplayTitle() {
 
 	_typeOfTask = new QLabel(_qmainWindow);
 	_typeOfTask->setPixmap(*(MariaUI::getImageHandler(_taskType)));
-	_typeOfTask->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_typeOfTask->setGeometry(-_qmainWindow->width(),0,0,0);
 	_typeOfTask->hide();
 }
 
@@ -86,7 +87,7 @@ void MariaUITask::setTimeTitle() {
 	_timeText = new QLabel(_qmainWindow);
 	_timeText->setAlignment(Qt::AlignRight);
 	_timeText->setStyleSheet("color:#000000;font-size:" + QString::number(FONT_SIZE_TIME) + "px; padding-right: " + QString::number(TEXTBOX_X_OFFSET) + "px;");
-	_timeText->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_timeText->setGeometry(-_qmainWindow->width(),0,0,0);
 	_timeText->hide();
 }
 
@@ -95,7 +96,7 @@ void MariaUITask::setDescription() {
 	_desciptionText->setStyleSheet("color:#000000;font-size:" + QString::number(FONT_SIZE_DESCRIPTION) + "px; padding-right: " + QString::number(TEXTBOX_X_OFFSET) + "px;");
 	_desciptionText->setAlignment(Qt::AlignLeft);
 	_desciptionText->setWordWrap(true);
-	_desciptionText->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_desciptionText->setGeometry(-_qmainWindow->width(),0,0,0);
 	_desciptionText->hide();
 }
 
@@ -103,13 +104,13 @@ void MariaUITask::setTimeAndIcon() {
 	_startEndText = new QLabel(_qmainWindow);
 	_startEndText->setStyleSheet("color:#000000;font-size:" + QString::number(FONT_SIZE_DESCRIPTION) + "px;");
 	_startEndText->setAlignment(Qt::AlignRight);
-	_startEndText->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_startEndText->setGeometry(-_qmainWindow->width(),0,0,0);
 	_startEndText->hide();
 
 	_completed = new QLabel(_qmainWindow);
 	_completed->setAlignment(Qt::AlignCenter);
 	_completed->setStyleSheet("color:#000000;font-size:" + QString::number(FONT_SIZE_DESCRIPTION) + "px;");
-	_completed->setGeometry(QRect(-_qmainWindow->width(),0,0,0));
+	_completed->setGeometry(-_qmainWindow->width(),0,0,0);
 	_completed->setPixmap(*MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED));
 	_completed->hide();
 }
@@ -123,30 +124,30 @@ bool MariaUITask::updatePosition() {
 				switch(_currentType) {
 				case NORMAL:
 					if(_taskType == MariaTask::FLOATING) {
-						_displayTitle->setGeometry(QRect(_position.x(), _position.y(), _width, TASK_HEIGHT_FLOATING));
+						_displayTitle->setGeometry(_position.x(), _position.y(), _width, TASK_HEIGHT_FLOATING);
 					} else {
-						_displayTitle->setGeometry(QRect(_position.x(), _position.y(), _width, TASK_HEIGHT));
+						_displayTitle->setGeometry(_position.x(), _position.y(), _width, TASK_HEIGHT);
 					}
-					_timeText->setGeometry(QRect(_position.x() + TIMESTAMP_X_OFFSET, _position.y()+TASK_HEIGHT-TIME_Y_OFFSET-FONT_SIZE_TIME, _width, TASK_HEIGHT));
+					_timeText->setGeometry(_position.x() + TIMESTAMP_X_OFFSET, _position.y()+TASK_HEIGHT-TIME_Y_OFFSET-FONT_SIZE_TIME, _width, TASK_HEIGHT);
 					break;
 				case EXPANDED:
-					_displayTitle->setGeometry(QRect(_position.x(), _position.y(), _width, TASK_HEIGHT_EXPANDED));
-					_desciptionText->setGeometry(QRect(_position.x() + TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET, _position.y() + DESCRIPTION_Y_OFFSET, _width-(TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET)*2, TASK_HEIGHT_EXPANDED-DESCRIPTION_Y_OFFSET*2));
+					_displayTitle->setGeometry(_position.x(), _position.y(), _width, TASK_HEIGHT_EXPANDED);
+					_desciptionText->setGeometry(_position.x() + TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET, _position.y() + DESCRIPTION_Y_OFFSET, _width-(TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET)*2, TASK_HEIGHT_EXPANDED-DESCRIPTION_Y_OFFSET*2);
 					break;
 				case CONTRACTED:
-					_displayTitle->setGeometry(QRect(_position.x(), _position.y(), _width, TASK_HEIGHT_CONTRACTED));
-					_timeText->setGeometry(QRect(_position.x() + TIMESTAMP_X_OFFSET, _position.y()+TASK_HEIGHT-TIME_Y_OFFSET-FONT_SIZE_TIME, _width, TASK_HEIGHT_CONTRACTED));
-					_desciptionText->setGeometry(QRect(_position.x() + TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET, _position.y() + DESCRIPTION_Y_OFFSET, TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET + TASK_HEIGHT_CONTRACTED_WIDTH , TASK_HEIGHT_CONTRACTED - DESCRIPTION_Y_OFFSET*2));
-					_startEndText->setGeometry(QRect(_position.x() + _width - TEXTBOX_X_OFFSET - START_END_TIME_WIDTH - (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(), _position.y() + DESCRIPTION_Y_OFFSET*0.5, START_END_TIME_WIDTH, TASK_HEIGHT_CONTRACTED - DESCRIPTION_Y_OFFSET));
-					_completed->setGeometry(QRect(_position.x() + _width - TEXTBOX_X_OFFSET - (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(),  _position.y() + DESCRIPTION_Y_OFFSET*0.5, (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(), (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->height()));
+					_displayTitle->setGeometry(_position.x(), _position.y(), _width, TASK_HEIGHT_CONTRACTED);
+					_desciptionText->setGeometry(_position.x() + TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET, _position.y() + DESCRIPTION_Y_OFFSET, TEXTBOX_X_OFFSET + DESCRIPTION_X_OFFSET + TASK_HEIGHT_CONTRACTED_WIDTH , TASK_HEIGHT_CONTRACTED - DESCRIPTION_Y_OFFSET*2);
+					_startEndText->setGeometry(_position.x() + _width - TEXTBOX_X_OFFSET - START_END_TIME_WIDTH - (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(), _position.y() + DESCRIPTION_Y_OFFSET*0.5, START_END_TIME_WIDTH, TASK_HEIGHT_CONTRACTED - DESCRIPTION_Y_OFFSET);
+					_completed->setGeometry(_position.x() + _width - TEXTBOX_X_OFFSET - (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(),  _position.y() + DESCRIPTION_Y_OFFSET*0.5, (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->width(), (MariaUI::getImageHandler(MariaUI::IMAGE_INDEX_COMPLETED))->height());
 					break;
 				}
-				_typeOfTask->setGeometry(QRect(_position.x() + TEXTBOX_X_OFFSET + BULLET_X_OFFSET, _position.y() + BULLET_Y_OFFSET, (MariaUI::getImageHandler(_taskType))->width(), (MariaUI::getImageHandler(_taskType))->height()));
+				_typeOfTask->setGeometry(_position.x() + TEXTBOX_X_OFFSET + BULLET_X_OFFSET, _position.y() + BULLET_Y_OFFSET, (MariaUI::getImageHandler(_taskType))->width(), (MariaUI::getImageHandler(_taskType))->height());
 				return true;
 		} else {
 			if(_updatePositionTimer->isActive()) {
 				_updatePositionTimer->stop();
 			}
+			_atLocation = true;
 			//Check if it has the chance of deactivating itself.
 			if(_position.y() < 0.0 || _position.y() > _qmainWindow->height()) {
 				deactivate();
@@ -192,6 +193,7 @@ bool MariaUITask::setTitlePretext(string pretext) {
 
 void MariaUITask::setPosition(QPointF position) {
 	_position = position;
+	_atLocation = false;
 	if(_updatePositionTimer!=NULL&&!_updatePositionTimer->isActive()) {
 		_updatePositionTimer->start(1);
 	}
@@ -203,6 +205,7 @@ QPointF MariaUITask::getPosition() {
 
 void MariaUITask::setDestination(QPointF destination) {
 	_destination = destination;
+	_atLocation = false;
 	if(_updatePositionTimer!=NULL&&!_updatePositionTimer->isActive()) {
 		_updatePositionTimer->start(1);
 	}
@@ -210,6 +213,10 @@ void MariaUITask::setDestination(QPointF destination) {
 
 QPointF MariaUITask::getDestination() {
 	return _destination;
+}
+
+bool MariaUITask::isAtLocation() {
+	return _atLocation;
 }
 
 bool MariaUITask::updateDetails() {
@@ -364,12 +371,10 @@ void MariaUITask::activate() {
 			break;
 		case EXPANDED:
 			this->setDisplayTitle();
-			this->setTimeTitle();
 			this->setDescription();
 			break;
 		case CONTRACTED:
 			this->setDisplayTitle();
-			this->setTimeTitle();
 			this->setDescription();
 			this->setTimeAndIcon();
 			break;

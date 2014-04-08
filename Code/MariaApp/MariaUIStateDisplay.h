@@ -41,6 +41,7 @@ public:
 	void eraseAllUITask();
 	void clearUITask();
 	int getTotalUITask();
+	bool isAllTaskAtLocation();
 	
 	void setPage(int page);
 	void setPageEnd();

@@ -51,6 +51,7 @@ public:
 private:
 	QMainWindow * _qmainWindow;
 	bool _active;
+	bool _atLocation;
 
 	QPointF _destination;
 	QPointF _position;
@@ -87,7 +88,7 @@ public:
 	QPointF getPosition();
 	void setDestination(QPointF destination);
 	QPointF getDestination();
-
+	bool isAtLocation();
 	bool updateDetails();
 
 	void stopUpdatingTime();

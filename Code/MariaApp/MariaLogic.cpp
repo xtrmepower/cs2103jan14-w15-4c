@@ -688,24 +688,28 @@ bool MariaLogic::processCommand_New(std::string inputText) {
 
 		case MariaInputObject::COMMAND_TYPE::PAGE_UP: {
 			MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
-			if (tempObj->isPageValid(tempObj->getPage()-1)) {
-				tempObj->setPage(tempObj->getPage()-1);
-				tempObj->updatePage();
-				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Going up.");
-			} else {
-				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are no more items up there.");
+			if(tempObj->isAllTaskAtLocation()) {
+				if (tempObj->isPageValid(tempObj->getPage()-1)) {
+					tempObj->setPage(tempObj->getPage()-1);
+					tempObj->updatePage();
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("Going up.");
+				} else {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are no more items up there.");
+				}
 			}
 		}
 		break;
 
 		case MariaInputObject::COMMAND_TYPE::PAGE_DOWN: {
 			MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
-			if (tempObj->isPageValid(tempObj->getPage()+1)) {
-				tempObj->setPage(tempObj->getPage()+1);
-				tempObj->updatePage();
-				mariaUI->getCommandBar()->getTextbox()->setQuestionText("Going down.");
-			} else {
-				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are no more items down there.");
+			if(tempObj->isAllTaskAtLocation()) {
+				if (tempObj->isPageValid(tempObj->getPage()+1)) {
+					tempObj->setPage(tempObj->getPage()+1);
+					tempObj->updatePage();
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("Going down.");
+				} else {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are no more items down there.");
+				}
 			}
 		}
 		break;
