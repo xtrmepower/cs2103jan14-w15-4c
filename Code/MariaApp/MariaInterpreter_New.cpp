@@ -1,9 +1,11 @@
 #include "MariaInterpreter_New.h"
 
 const string MariaInterpreter_New::MESSAGE_INVALID_COMMAND = "Invalid command detected.";
+const string MariaInterpreter_New::MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format detected.";
 const string MariaInterpreter_New::MESSAGE_INVALID_OPTION = "Invalid option.";
 const string MariaInterpreter_New::MESSAGE_INVALID_DATE_TIME = "Invalid date/time detected.";
 const string MariaInterpreter_New::MESSAGE_NO_ACTIVITY_TITLE = "No activity title detected.";
+const string MariaInterpreter_New::MESSAGE_NO_ACTIVITY_TITLE_EDIT = "No new activity title detected.";
 const string MariaInterpreter_New::MESSAGE_NO_INPUT = "No input detected.";
 const string MariaInterpreter_New::MESSAGE_NO_OPTION = "No option selected.";
 
@@ -92,6 +94,10 @@ MariaInputObject* MariaInterpreter_New::parseInput(string input, STATE_TYPE curr
 	switch (commandKeyword->second) {
 	case MariaInputObject::COMMAND_TYPE::ADD:
 		parseAdd(input, toReturn, currentState);
+		break;
+
+	case MariaInputObject::COMMAND_TYPE::EDIT:
+		parseEdit(input, toReturn, currentState);
 		break;
 
 	case MariaInputObject::COMMAND_TYPE::SHOW:
@@ -622,6 +628,110 @@ void MariaInterpreter_New::parseAddTimedTask(string input, MariaInputObject* inp
 		throw exception(MESSAGE_INVALID_DATE_TIME.c_str());
 	}
 	inputObject->setStartTime(new MariaTime(year, month, day, hour, min));
+}
+
+void MariaInterpreter_New::parseEdit(string input, MariaInputObject* inputObject, STATE_TYPE currentState) {
+	assert(inputObject != NULL);
+
+	if (input.size() == 0) {
+		SAFE_DELETE(inputObject);
+		throw exception(MESSAGE_NO_ACTIVITY_TITLE.c_str());
+	}
+
+	vector<string> tokenizedInput = tokenizeString(input);
+	// <task title> change title/start/end <editfield>
+	// therefore 4 tokens minimum
+	if (tokenizedInput.size() < 4) {
+		SAFE_DELETE(inputObject);
+		throw exception(MESSAGE_INVALID_COMMAND_FORMAT.c_str());
+	}
+
+	int changeTitlePos;
+	int changeStartPos;
+	int changeEndPos;
+	int inputSize = input.size();
+	string editFieldString;
+	
+	extractFromBackOfString(input, " change title ", changeTitlePos);
+	extractFromBackOfString(input, " change start ", changeStartPos);
+	extractFromBackOfString(input, " change end ", changeEndPos);
+
+	switch (currentState) {
+	case STATE_TYPE::CONFLICT:
+		if (isInteger(tokenizedInput[0])) {
+			inputObject->setOptionID(atoi(tokenizedInput[0].c_str()));
+
+			// Carry on parsing.
+			if (changeTitlePos != inputSize &&
+				changeStartPos == inputSize &&
+				changeEndPos == inputSize) {
+				editFieldString = extractFromBackOfString(input, " change title ", changeTitlePos);
+				input = input.substr(0, changeTitlePos);
+				inputObject->setTitle(input);
+				tokenizedInput = tokenizeString(editFieldString);
+				editFieldString = stitchString(tokenizedInput, 3, tokenizedInput.size());
+
+				if (editFieldString.size() == 0) {
+					SAFE_DELETE(inputObject);
+					throw exception(MESSAGE_NO_ACTIVITY_TITLE_EDIT.c_str());
+				}
+				inputObject->setEditField(editFieldString);
+				inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::EDIT_TITLE);
+			} else if (changeTitlePos == inputSize &&
+				changeStartPos != inputSize &&
+				changeEndPos == inputSize) {
+				editFieldString = extractFromBackOfString(input, " change start ", changeStartPos);
+				input = input.substr(0, changeStartPos);
+				inputObject->setTitle(input);
+			} else if (changeTitlePos == inputSize &&
+				changeStartPos == inputSize &&
+				changeEndPos != inputSize) {
+				editFieldString = extractFromBackOfString(input, " change end ", changeEndPos);
+				input = input.substr(0, changeEndPos);
+				inputObject->setTitle(input);
+			} else {
+				SAFE_DELETE(inputObject);
+				throw exception(MESSAGE_INVALID_COMMAND_FORMAT.c_str());
+			}
+		} else {
+			throw exception(MESSAGE_INVALID_OPTION.c_str());
+		}
+		break;
+
+	default:
+		if (changeTitlePos != inputSize &&
+			changeStartPos == inputSize &&
+			changeEndPos == inputSize) {
+			editFieldString = extractFromBackOfString(input, " change title ", changeTitlePos);
+			input = input.substr(0, changeTitlePos);
+			inputObject->setTitle(input);
+			tokenizedInput = tokenizeString(editFieldString);
+			editFieldString = stitchString(tokenizedInput, 3, tokenizedInput.size());
+
+			if (editFieldString.size() == 0) {
+				SAFE_DELETE(inputObject);
+				throw exception(MESSAGE_NO_ACTIVITY_TITLE_EDIT.c_str());
+			}
+			inputObject->setEditField(editFieldString);
+			inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::EDIT_TITLE);
+		} else if (changeTitlePos == inputSize &&
+			changeStartPos != inputSize &&
+			changeEndPos == inputSize) {
+			editFieldString = extractFromBackOfString(input, " change start ", changeStartPos);
+			input = input.substr(0, changeStartPos);
+			inputObject->setTitle(input);
+		} else if (changeTitlePos == inputSize &&
+			changeStartPos == inputSize &&
+			changeEndPos != inputSize) {
+			editFieldString = extractFromBackOfString(input, " change end ", changeEndPos);
+			input = input.substr(0, changeEndPos);
+			inputObject->setTitle(input);
+		} else {
+			SAFE_DELETE(inputObject);
+			throw exception(MESSAGE_INVALID_COMMAND_FORMAT.c_str());
+		}
+		break;
+	}
 }
 
 void MariaInterpreter_New::parseShow(string input, MariaInputObject* inputObject, STATE_TYPE currentState) {

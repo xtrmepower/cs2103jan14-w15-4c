@@ -440,9 +440,6 @@ bool MariaLogic::processCommand_New(std::string inputText) {
 	MariaInputObject* input = NULL;
 	MariaStateObject* currentObj = mariaStateManager->getCurrentStateObject();
 
-	// Empty out the input box first.
-	mariaUI->getCommandBar()->getTextbox()->setUserInput("");
-
 	// Attempt to parse the input.
 	try {
 		input = mariaInterpreter->parseInput(inputText, mariaStateManager->getCurrentState());
@@ -452,6 +449,9 @@ bool MariaLogic::processCommand_New(std::string inputText) {
 		mariaUI->getCommandBar()->getStatus()->setStatus(MariaUIStatus::UNKNOWN);
 		return false;
 	}
+
+	// Only empty the input box on a successful command.
+	mariaUI->getCommandBar()->getTextbox()->setUserInput("");
 
 	switch (input->getCommandType()) {
 		case MariaInputObject::COMMAND_TYPE::EXIT: {
@@ -502,6 +502,47 @@ bool MariaLogic::processCommand_New(std::string inputText) {
 				}
 			} else {
 				mariaUI->getCommandBar()->getTextbox()->setQuestionText("There is a problem adding '" + inputText + "'");
+			}
+		}
+		break;
+
+		case MariaInputObject::COMMAND_TYPE::EDIT_TITLE: {
+			string toEditTitle = input->getTitle();
+
+			//Jay: Pending splitting up of conflict and non conflict.
+			if (mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
+				int numberToEdit = input->getOptionID();
+				MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
+				if(numberToEdit > 0 && numberToEdit <= tempObj->getTotalUITask()) {
+					//TO DO, transit to edit state.
+					MariaUITask* toEditTask = tempObj->eraseUITask(numberToEdit-1);
+					toEditTask->getMariaTask()->setTitle(input->getEditField());
+					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
+					
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("Ok, I have updated the title.");
+					mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager));
+					mariaStateManager->transitState();					
+				}
+			} else {
+				vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(toEditTitle, false);
+
+				if (listOfTasks.size() == 1) {
+					if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME) {
+						listOfTasks[0]->setTitle(input->getEditField());
+						mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
+						MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
+						mariaUI->getCommandBar()->getTextbox()->setQuestionText("Ok, I have updated the title.");
+						tempObj->updateUITask();
+						tempObj->updatePage();
+					}
+				} else if (listOfTasks.size() == 0) {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("I couldn't find anything related. Try again.");
+				} else {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I edit?");
+
+					mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, mariaTaskManager, toEditTitle));
+					mariaStateManager->transitState();
+				}
 			}
 		}
 		break;
