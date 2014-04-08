@@ -1,7 +1,6 @@
 #include <QKeyEvent>
 #include "MariaUI.h"
 #include "MariaLogic.h"
-#include "MariaInterpreter.h"
 
 const float MariaUI::FLOW_FACTOR = 0.1;
 const float MariaUI::VALUE_THRESHOLD = 1.0;
@@ -124,6 +123,19 @@ void MariaUI::updateBackgroundColor() {
 	this->setStyleSheet("QMainWindow {background-color: rgb(" + backgroundcolor + ");min-width:400px;min-height:120px;}");
 }
 
+void MariaUI::showHideEvent() {
+	if(isVisible()) {
+		setWindowState(Qt::WindowState::WindowMinimized);
+		trayIcon->show();
+		trayIcon->showMessage("M.A.R.I.A. is still running!", "Press Ctrl + Space to show M.A.R.I.A.\nType \'exit\' to quit the program.");
+		hide();
+	} else {
+		setWindowState(Qt::WindowState::WindowActive);
+		trayIcon->hide();
+		show();
+	}
+}
+
 void MariaUI::resizeEvent(QResizeEvent* event) {
 	QWidget::resizeEvent(event);
 }
@@ -170,17 +182,9 @@ void MariaUI::keyReleaseEvent(QKeyEvent* event) {
 	}
 }
 
-void MariaUI::showHideEvent() {
-	if(isVisible()) {
-		setWindowState(Qt::WindowState::WindowMinimized);
-		trayIcon->show();
-		trayIcon->showMessage("M.A.R.I.A. is still running!", "Press Ctrl + Space to show M.A.R.I.A.\nType \'exit\' to quit the program.");
-		hide();
-	} else {
-		setWindowState(Qt::WindowState::WindowActive);
-		trayIcon->hide();
-		show();
-	}
+void MariaUI::forceLogicCall() {
+	//Overwrite for UI classes to initiate a call to logic instead of through keyboards.
+	_mariaLogic->generateTextforUI();
 }
 
 void MariaUI::setExpand(bool value) {
