@@ -1,3 +1,4 @@
+//@author A0111821X
 #pragma once
 
 #include <string>
@@ -51,6 +52,7 @@ private:
 	void parseEditTitle(string input, MariaInputObject* inputObject);
 	void parseEditStartTime(string input, MariaInputObject* inputObject);
 	void parseEditEndTime(string input, MariaInputObject* inputObject);
+	void parseEditDescription(string input, MariaInputObject* inputObject);
 	void parseShow(string input, MariaInputObject* inputObject, STATE_TYPE currentState);
 	void parseSearch(string input, MariaInputObject* inputObject, STATE_TYPE currentState);
 	void parseDelete(string input, MariaInputObject* inputObject, STATE_TYPE currentState);

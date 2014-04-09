@@ -275,6 +275,47 @@ bool MariaLogic::processCommand(std::string inputText) {
 		}
 		break;
 
+		case MariaInputObject::COMMAND_TYPE::EDIT_DESCRIPTION: {
+			string toEditTitle = input->getTitle();
+
+			//Jay: Pending splitting up of conflict and non conflict.
+			if (mariaStateManager->getCurrentState() == STATE_TYPE::CONFLICT) {
+				int numberToEdit = input->getOptionID();
+				MariaUIStateConflict* tempObj = (MariaUIStateConflict*)currentObj;
+				if(numberToEdit > 0 && numberToEdit <= tempObj->getTotalUITask()) {
+					//TO DO, transit to edit state.
+					MariaUITask* toEditTask = tempObj->eraseUITask(numberToEdit-1);
+					toEditTask->getMariaTask()->setDescription(input->getEditField());
+					mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
+					
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("Ok, I have updated the description.");
+					mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHome((QMainWindow*)mariaUI, mariaTaskManager->getWeeklyTask()));
+					mariaStateManager->transitState();					
+				}
+			} else {
+				vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(toEditTitle, false);
+
+				if (listOfTasks.size() == 1) {
+					if(mariaStateManager->getCurrentState() == STATE_TYPE::HOME || mariaStateManager->getCurrentState() == STATE_TYPE::SHOW) {
+						listOfTasks[0]->setDescription(input->getEditField());
+						mariaFileManager->writeFile(mariaTaskManager->getAllTasks());
+						MariaUIStateDisplay* tempObj = (MariaUIStateDisplay*)currentObj;
+						mariaUI->getCommandBar()->getTextbox()->setQuestionText("Ok, I have updated the description.");
+						tempObj->updateUITask();
+						tempObj->updatePage();
+					}
+				} else if (listOfTasks.size() == 0) {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("I couldn't find anything related. Try again.");
+				} else {
+					mariaUI->getCommandBar()->getTextbox()->setQuestionText("There are similar tasks, which one should I edit?");
+
+					mariaStateManager->queueState(STATE_TYPE::CONFLICT, new MariaUIStateConflict((QMainWindow*)mariaUI, listOfTasks));
+					mariaStateManager->transitState();
+				}
+			}
+		}
+		break;
+
 		case MariaInputObject::COMMAND_TYPE::SHOW_DATE: {
 			// Show today, tomorrow, date
 			// Date object is obtained through input->getEndTime();
