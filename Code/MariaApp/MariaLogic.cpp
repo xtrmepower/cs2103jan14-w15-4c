@@ -1,4 +1,5 @@
 #include "MariaLogic.h"
+#include "MariaUIStateCredits.h"
 #include "MariaUIStateLoading.h"
 #include "MariaUIStateHome.h"
 #include "MariaUIStateHelp.h"
@@ -23,10 +24,13 @@ MariaLogic::MariaLogic(int argc, char *argv[]) : QApplication(argc, argv) {
 	mariaUI = new MariaUI(this);
 	mariaStateManager = new MariaStateManager();
 
-	MariaUIStateLoading *temp = new MariaUIStateLoading((QMainWindow*)mariaUI);
+	/*MariaUIStateLoading *temp = new MariaUIStateLoading((QMainWindow*)mariaUI);
 	mariaStateManager->queueState(STATE_TYPE::LOADING, temp);
 	temp->setDisplayText("Loading");
-	temp->setLoadingDone();
+	temp->setLoadingDone();*/
+
+	MariaUIStateCredits *temp = new MariaUIStateCredits((QMainWindow*)mariaUI);
+	mariaStateManager->queueState(STATE_TYPE::CREDITS, temp);
 
 	//mariaStateManager->queueState(STATE_TYPE::HOME, new MariaUIStateHelp((QMainWindow*)mariaUI));
 
@@ -77,6 +81,12 @@ bool MariaLogic::checkValidCommand(std::string inputText) {
 bool MariaLogic::processCommand(std::string inputText) {
 	MariaInputObject* input = NULL;
 	MariaStateObject* currentObj = mariaStateManager->getCurrentStateObject();
+
+	//Process states where there are no commands.
+	if (mariaStateManager->getCurrentState() == STATE_TYPE::CREDITS) {
+		((MariaUIStateCredits*) currentObj)->setDoneAnimating();
+			return false;
+	}
 
 	// Attempt to parse the input.
 	try {
@@ -170,7 +180,9 @@ bool MariaLogic::processCommand(std::string inputText) {
 	}
 
 	//Overall UI Refresh
-	((MariaUIStateDisplay*)currentObj)->updatePage();
+	if( MariaUIStateDisplay* tempObj = dynamic_cast< MariaUIStateDisplay* >( currentObj ) ) {
+		tempObj->updatePage();
+	}
 
 	// Clean up.
 	SAFE_DELETE(input);

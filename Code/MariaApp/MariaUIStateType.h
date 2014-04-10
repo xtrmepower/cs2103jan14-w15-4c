@@ -4,9 +4,9 @@ typedef enum {
 	BLANK, 
 	HOME, 
 	SHOW, 
-	EDIT, 
-	SETTING, 
+	HELP, 
 	CONFLICT, 
 	LOADING, 
+	CREDITS, 
 	QUIT
 } STATE_TYPE;

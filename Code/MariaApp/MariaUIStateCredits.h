@@ -1,38 +1,37 @@
 #pragma once
 
+#include <string>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/qlabel.h>
 #include <QtCore/QTimer>
 #include "MariaStateObject.h"
 
-class MariaUIStateLoading : public MariaStateObject {
-	static const int AMOUNT_OF_DOTS = 5;
+using namespace std;
+
+class MariaUIStateCredits : public MariaStateObject {
 	static const int LOGO_SPEED_RETARDER = 80;
+	static const int FONT_SIZE = 18;
+	static const int FONT_SIZE_BODY = 14;
 	static const float FLOW_FACTOR;
 	static const float VALUE_THRESHOLD;
 	static const float DISPLAY_TEXT_WIDTH;
 	static const float DISPLAY_TEXT_HEIGHT;
+	static const float DISPLAYBODY_TEXT_WIDTH;
+	static const float DISPLAYBODY_TEXT_HEIGHT;
 	static const float LOGO_START_Y;
 	static const float LOGO_STAGE_Y_SCALE;
 	static const float TEXT_STAGE_Y_SCALE;
-	static const float DOTS_STAGE_Y_SCALE;
-	static const float DOTS_X_OFFSET;
-	static const float DOTS_SEPARATION_WIDTH;
-	static const float DOTS_X_SPEED;
-	static const float DOTS_X_VARIABLE_SPEED;
+	static const float TEXTBODY_STAGE_Y_SCALE;
+	static const string CREDITS_STRING;
+	static const string CREDITS_STRING_BODY;
 	
 	QMainWindow *_qmainWindow;
-
+	
 	QLabel *_displayText;
+	QLabel *_displayTextBody;
 	QLabel *_logo;
-	float _logoYPos;
 	int _logoImageIndex;
-
-	QLabel *_loadingDots[AMOUNT_OF_DOTS];
-	float _dotsXPos[AMOUNT_OF_DOTS];
-
-	bool _doneLoading;
-	bool _quitAfterLoading;
+	bool _doneAnimating;
 
 	void initBeginState();
 	void initActiveState();
@@ -41,13 +40,12 @@ class MariaUIStateLoading : public MariaStateObject {
 	bool timerActiveState();
 	bool timerEndState();
 
-	void animateLogo();
 public:
-	MariaUIStateLoading(QMainWindow* qmainWindow);
-	~MariaUIStateLoading();
+	MariaUIStateCredits(QMainWindow* qmainWindow);
+	~MariaUIStateCredits();
 
-	void setDisplayText(const QString text);
-	void setLoadingDone();
-	void setQuitAfterLoadingTrue();
+	void animateLogo();
+	void setDoneAnimating();
+	void updateGUIPosition();
 };
 
