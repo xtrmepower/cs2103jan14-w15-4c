@@ -30,19 +30,19 @@ public:
 	
 	static const string PREVIEW_FLOATING_SUGGESTION_DEFAULT;
 	static const string PREVIEW_FREE_DAY;
-
+	static const string PREVIEW_FREE_DAY_TODAY;
+	
 	static const float START_HEIGHT_SCALE;
+	static const float CALENDAR_HEIGHT_SCALE;
 	static const float MESSAGE_HEIGHT;
-	static const float TODAYBAR_STARTHEIGHT_SCALE;
-	static const float TOMORROWBAR_STARTHEIGHT_SCALE;
-	static const float CALENDARBAR_STARTHEIGHT_SCALE;
+	static const float SPACING_HEIGHT;
 	static const float TITLE_SEPARATE_HEIGHT;
 	static const float TITLE_AREA_HEIGHT;
-	static const float TITLE_XOFFSET;
 	static const float BODY_XOFFSET;
 	static const float DIVIDER_HEIGHT;
 	static const int TEXTBOX_X_OFFSET = 30;
-	static const int FONT_SIZE = 14;
+	static const int MAX_CHAR_LENGTH = 40;
+	static const int FONT_SIZE = 12;
 	static const int STRING_BUFFER_SIZE = 255;
 	static const int MAX_TASK_SHOWN = 3;
 
@@ -62,6 +62,8 @@ private:
 	string _generatedTodayText;
 	string _generatedTomorrowText;
 	string _generatedSuggestionText;
+
+	int endLineCount(string text);
 
 public:
 	MariaUIPreview(QMainWindow *qmainWindow);

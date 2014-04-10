@@ -60,6 +60,7 @@ bool MariaUIStateHome::timerEndState() {
 
 void MariaUIStateHome::updateGUI() {
 	((MariaUI*)_qmainWindow)->forceLogicCall();
+	_preview->updateGUI(getPosition());
 }
 
 MariaUIPreview* MariaUIStateHome::getUIPreview() {
