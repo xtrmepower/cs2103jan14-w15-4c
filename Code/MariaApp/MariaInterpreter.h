@@ -11,16 +11,7 @@
 #include <cassert>
 #include "MariaInputObject.h"
 #include "MariaUIStateType.h"
-using namespace std;
-
-// Safely deletes a pointer.
-#define SAFE_DELETE(ptr)	\
-	if (ptr != NULL)		\
-	{						\
-		delete ptr;			\
-		ptr = NULL;			\
-	}
-
+#include "MariaMacros.h"
 using namespace std;
 
 class MariaInterpreter {
@@ -34,7 +25,6 @@ public:
 	static const string MESSAGE_NO_ACTIVITY_TITLE_EDIT;
 	static const string MESSAGE_NO_INPUT;
 	static const string MESSAGE_NO_OPTION;
-
 
 	MariaInterpreter(map<string, MariaInputObject::COMMAND_TYPE>* inputCommandList = NULL);
 	~MariaInterpreter(void);

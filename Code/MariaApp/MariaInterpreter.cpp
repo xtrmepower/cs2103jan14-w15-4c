@@ -792,8 +792,6 @@ void MariaInterpreter::parseTime(string input, int& hour, int& min) {
 
 MariaTime* MariaInterpreter::parseDateTimeString(vector<string> tokenizedDateTime) {
 	int year, month, day, hour, min;
-	// Flags to ensure that only the very last of each is captured.
-	// Extra dates are ignored.
 	bool hasDateString = false;
 	bool hasTimeString = false;
 

@@ -244,6 +244,7 @@
     <ClInclude Include="MariaInputObject.h" />
     <ClInclude Include="MariaInterpreter.h" />
     <ClInclude Include="MariaLogic.h" />
+    <ClInclude Include="MariaMacros.h" />
     <ClInclude Include="MariaUIStateType.h" />
     <ClInclude Include="MariaUndoObserver.h" />
     <CustomBuild Include="MariaStateManager.h">
