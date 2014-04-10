@@ -167,7 +167,13 @@ void MariaUI::keyReleaseEvent(QKeyEvent* event) {
 			getCommandBar()->getTextbox()->setQuestionText("Nothing to Undo.");
 		}
 	} else if(keyPressed == Qt::Key_Return || keyPressed == Qt::Key_Enter) {
-		_mariaLogic->processCommand(_commandBar->getTextbox()->getUserInput());
+		try {
+			string result = _mariaLogic->processCommand(_commandBar->getTextbox()->getUserInput());
+			_commandBar->getTextbox()->setQuestionText(result);
+		} catch (exception& e) {
+			_commandBar->getTextbox()->setQuestionText(e.what());
+			_commandBar->getStatus()->setStatus(MariaUIStatus::UNKNOWN);
+		}
 	} else if(keyPressed == Qt::Key_Up) {
 		_mariaLogic->processCommand("up");
 	} else if(keyPressed == Qt::Key_Down) {
