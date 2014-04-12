@@ -253,6 +253,13 @@ void MariaInterpreter::parseAddTimedTask(string input, MariaInputObject* inputOb
 	}
 
 	inputObject->setStartTime(startTime);
+
+	while (inputObject->getStartTime()->compareTo(*inputObject->getEndTime()) > 0) {
+		MariaTime* newEndTime = new MariaTime(endTime->getYear(), endTime->getMonth(), endTime->getDay()+7, endTime->getHour(), endTime->getMin());
+		SAFE_DELETE(endTime);
+
+		inputObject->setEndTime(newEndTime);
+	}
 }
 
 void MariaInterpreter::parseEdit(string input, MariaInputObject* inputObject, STATE_TYPE currentState) {
@@ -458,6 +465,8 @@ void MariaInterpreter::parseShow(string input, MariaInputObject* inputObject, ST
 		throw exception(MESSAGE_INVALID_COMMAND_LOCATION.c_str());
 	}
 
+	int dummyVar = 0;
+
 	if (input.size() == 0) {
 		inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE);
 		inputObject->setEndTime(new MariaTime(MariaTime::getCurrentTime()));
@@ -471,7 +480,71 @@ void MariaInterpreter::parseShow(string input, MariaInputObject* inputObject, ST
 		inputObject->setEndTime(new MariaTime(MariaTime::getCurrentTime().getYear(), MariaTime::getCurrentTime().getMonth(), MariaTime::getCurrentTime().getDay()+1));
 	} else if (hasDate(input)) {
 		// Need to check if there are 1 or more dates.
-		if (isStringEqual(input, "(^(0?[1-9]|[12][0-9]|3[01])[-/](0?[1-9]|1[012])[-/](19|20)?[0-9][0-9]$)")) {
+		if (hasDateTime(extractFromBackOfString(input, "from ", dummyVar)) && hasDateTime(extractFromBackOfString(input, " to ", dummyVar))) {
+			////////
+			// To //
+			////////
+			int delimiterPos = 0;
+			string dateTimeString = extractFromBackOfString(input, " to ", delimiterPos);
+
+			input = input.substr(0, delimiterPos);
+
+			if (dateTimeString.size() == 0) {
+				SAFE_DELETE(inputObject);
+				throw exception(MESSAGE_INVALID_DATE_TIME.c_str());
+			}
+
+			dateTimeString = trimWhiteSpace(dateTimeString);
+			vector<string> tokenizedDateTime = tokenizeString(dateTimeString);
+			removeTokens(tokenizedDateTime, 0, 1);
+
+			MariaTime* endTime;
+
+			try {
+				endTime = parseDateTimeString(tokenizedDateTime);
+			} catch (exception& e) {
+				SAFE_DELETE(inputObject);
+				throw;
+			}
+
+			inputObject->setEndTime(endTime);
+
+			//////////
+			// From //
+			//////////
+			delimiterPos = 0;
+			dateTimeString = extractFromBackOfString(input, "from ", delimiterPos);
+
+			input = input.substr(0, delimiterPos);
+
+			if (dateTimeString.size() == 0) {
+				SAFE_DELETE(inputObject);
+				throw exception(MESSAGE_INVALID_DATE_TIME.c_str());
+			}
+
+			dateTimeString = trimWhiteSpace(dateTimeString);
+			tokenizedDateTime = tokenizeString(dateTimeString);
+			removeTokens(tokenizedDateTime, 0, 1);
+
+			MariaTime* startTime;
+
+			try {
+				startTime = parseDateTimeString(tokenizedDateTime);
+			} catch (exception& e) {
+				SAFE_DELETE(inputObject);
+				throw;
+			}
+
+			inputObject->setStartTime(startTime);
+			inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::SHOW_DATE_RANGE);
+
+			while (inputObject->getStartTime()->compareTo(*inputObject->getEndTime()) > 0) {
+				MariaTime* newEndTime = new MariaTime(endTime->getYear(), endTime->getMonth(), endTime->getDay()+7, endTime->getHour(), endTime->getMin());
+				SAFE_DELETE(endTime);
+
+				inputObject->setEndTime(newEndTime);
+			}
+		} else if (isStringEqual(input, "(^(0?[1-9]|[12][0-9]|3[01])[-/](0?[1-9]|1[012])[-/](19|20)?[0-9][0-9]$)")) {
 			int seperatorPos = 0;
 			char seperatorArray[2] = { '/', '-' };
 

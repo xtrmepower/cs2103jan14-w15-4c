@@ -31,7 +31,7 @@ void MariaUIStateHelp::initEndState() {
 }
 
 bool MariaUIStateHelp::timerBeginState() {
-	_helpImage->setGeometry(QRect(getPosition().x(), getPosition().y(), HELP_IMAGE_SIZE, HELP_IMAGE_SIZE));
+	_helpImage->setGeometry(QRect(getPosition().x(), getPosition().y(), HELP_IMAGE_WIDTH, HELP_IMAGE_HEIGHT));
 	return false;
 }
 
@@ -44,7 +44,7 @@ bool MariaUIStateHelp::timerActiveState() {
 }
 
 bool MariaUIStateHelp::timerEndState() {
-	_helpImage->setGeometry(QRect(getPosition().x(), getPosition().y(), HELP_IMAGE_SIZE, HELP_IMAGE_SIZE));
+	_helpImage->setGeometry(QRect(getPosition().x(), getPosition().y(), HELP_IMAGE_WIDTH, HELP_IMAGE_HEIGHT));
 	return false;
 }
 

@@ -6,7 +6,8 @@
 
 class MariaUIStateHelp : public MariaStateObject {
 	
-	static const int HELP_IMAGE_SIZE = 500;
+	static const int HELP_IMAGE_WIDTH = 480;
+	static const int HELP_IMAGE_HEIGHT = 640;
 
 	QMainWindow *_qmainWindow;
 	QLabel *_helpImage;

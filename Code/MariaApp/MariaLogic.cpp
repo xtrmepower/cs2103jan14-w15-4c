@@ -523,8 +523,8 @@ string MariaLogic::runCommandShowDateRange(MariaInputObject* input, MariaStateOb
 	endTime->setMin(59);
 	vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
 
-	mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have on " + MariaTime::convertToMonthString(startTime) + ".");
-	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, MariaTime::convertToMonthString(startTime), listOfTasks));
+	mariaUI->getCommandBar()->getTextbox()->setQuestionText("This is what you have from " + MariaTime::convertToDateString(startTime) + " to " + MariaTime::convertToDateString(endTime));
+	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, MariaTime::convertToDateString(startTime) + " to " + MariaTime::convertToDateString(endTime), listOfTasks));
 	mariaStateManager->transitState();
 
 	SAFE_DELETE(startTime);
