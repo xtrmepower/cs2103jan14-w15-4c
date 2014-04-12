@@ -23,7 +23,8 @@ MariaLogic::~MariaLogic(void) {
 }
 
 bool MariaLogic::processUndo() {
-	if (mariaStateManager->getCurrentState() != STATE_TYPE::HOME) {
+	/*STATE_TYPE currentState = mariaStateManager->getCurrentState();
+	if (currentState != STATE_TYPE::HOME && currentState != STATE_TYPE::SHOW) {
 		return false; //temporary disable undo everywhere except home
 	}
 
@@ -38,14 +39,16 @@ bool MariaLogic::processUndo() {
 			//refresh GUI!
 			((MariaUIStateHome*)currentObj)->eraseUITask(changed);
 		} else if (taskCountDifference > 0) {
-			((MariaUIStateHome*)currentObj)->addUITask(changed, MariaUITask::DISPLAY_TYPE::NORMAL);
+			//((MariaUIStateHome*)currentObj)->addUITask(changed, MariaUITask::DISPLAY_TYPE::NORMAL);
+//			addTaskToUI(changed, state);
 			((MariaUIStateHome*)currentObj)->setPageEnd();
-		}
+		} 
 		mariaTaskManager->compareToPreviousQuery();
 		return true;
-	}
+	}*/
 	return false;
 }
+
 
 bool MariaLogic::checkValidCommand(std::string inputText) {
 	return mariaInterpreter->checkValidCommand(inputText);
@@ -509,7 +512,7 @@ string MariaLogic::runCommandShowDate(MariaInputObject* input, MariaStateObject*
 	MariaTime* endTime = input->getEndTime();
 	endTime->setHour(23);
 	endTime->setMin(59);
-	vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime);
+	vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(startTime, endTime, true);
 
 	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, MariaTime::convertToDateString(startTime), listOfTasks));
 	mariaStateManager->transitState();
@@ -533,7 +536,7 @@ string MariaLogic::runCommandShowAll(MariaInputObject* input, MariaStateObject* 
 	assert(input != NULL);
 	assert(state != NULL);
 
-	vector<MariaTask*> listOfTasks = mariaTaskManager->getAllTasks();
+	vector<MariaTask*> listOfTasks = mariaTaskManager->getAllTasks(true);
 	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, "All Tasks", listOfTasks));
 	mariaStateManager->transitState();
 	
@@ -544,7 +547,7 @@ string MariaLogic::runCommandSearch(MariaInputObject* input, MariaStateObject* s
 	assert(input != NULL);
 	assert(state != NULL);
 
-	vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(input->getTitle());
+	vector<MariaTask*> listOfTasks = mariaTaskManager->findTask(input->getTitle(), true);
 	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, input->getTitle(), listOfTasks));
 	mariaStateManager->transitState();
 	return ("This is the result of the search for '" + input->getTitle() + "'.");
@@ -690,11 +693,30 @@ string MariaLogic::runCommandUndo(MariaInputObject* input, MariaStateObject* sta
 	assert(input != NULL);
 	assert(state != NULL);
 
-	if (processUndo()) {
-		return ("Undo was sucessful");
-	} else {
-		return ("Nothing to Undo.");
+	STATE_TYPE currentState = mariaStateManager->getCurrentState();
+	if (currentState != STATE_TYPE::HOME && currentState != STATE_TYPE::SHOW) {
+		return "Cannot perform Undo here.";
 	}
+
+	MariaStateObject* currentObj = mariaStateManager->getCurrentStateObject();
+	MariaTask* changed = mariaTaskManager->undoLast();
+
+	if (changed) {
+		saveToFile();
+
+		int taskCountDifference = mariaTaskManager->compareToPreviousQuery();
+		if (taskCountDifference < 0) {
+			//refresh GUI!
+			((MariaUIStateHome*)currentObj)->eraseUITask(changed);
+		} else if (taskCountDifference > 0) {
+			//((MariaUIStateHome*)currentObj)->addUITask(changed, MariaUITask::DISPLAY_TYPE::NORMAL);
+			addTaskToUI(changed, state);
+			((MariaUIStateHome*)currentObj)->setPageEnd();
+		} 
+		mariaTaskManager->compareToPreviousQuery();
+		return ("Undo was sucessful");
+	}
+	return ("Nothing to Undo.");
 }
 
 string MariaLogic::runCommandGoHome(MariaInputObject* input, MariaStateObject* state) {
