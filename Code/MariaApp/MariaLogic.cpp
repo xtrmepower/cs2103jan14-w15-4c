@@ -260,14 +260,14 @@ string MariaLogic::runCommandAddFloatingTask(MariaInputObject* input, MariaState
 	assert(state != NULL);
 
 	MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), NULL, NULL);
-	const char* taskTitle = input->getTitle().c_str();
+	string taskTitle = input->getTitle();
 
 	if (toAdd != NULL) {
 		addTaskToUI(toAdd, state);
 		saveToFile();
-		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle.c_str());
 	} else {
-		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle.c_str());
 	}
 }
 
@@ -276,14 +276,14 @@ string MariaLogic::runCommandAddDeadlineTask(MariaInputObject* input, MariaState
 	assert(state != NULL);
 
 	MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), NULL, input->getEndTime());
-	const char* taskTitle = input->getTitle().c_str();
+	string taskTitle = input->getTitle();
 
 	if (toAdd != NULL) {
 		addTaskToUI(toAdd, state);
 		saveToFile();
-		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle.c_str());
 	} else {
-		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle.c_str());
 	}
 }
 
@@ -292,14 +292,14 @@ string MariaLogic::runCommandAddTimedTask(MariaInputObject* input, MariaStateObj
 	assert(state != NULL);
 
 	MariaTask *toAdd = mariaTaskManager->addTask(input->getTitle(), input->getStartTime(), input->getEndTime());
-	const char* taskTitle = input->getTitle().c_str();
+	string taskTitle = input->getTitle();
 
 	if (toAdd != NULL) {
 		addTaskToUI(toAdd, state);
 		saveToFile();
-		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_SUCESS, taskTitle.c_str());
 	} else {
-		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle);
+		return MariaText::format(MariaText::TASK_ADDED_ERROR, taskTitle.c_str());
 	}
 }
 
@@ -564,7 +564,7 @@ string MariaLogic::runCommandSearch(MariaInputObject* input, MariaStateObject* s
 	mariaStateManager->queueState(STATE_TYPE::SHOW, new MariaUIStateShow((QMainWindow*)mariaUI, input->getTitle(), listOfTasks));
 	mariaStateManager->transitState();
 
-	return MariaText::format(MariaText::SEARCH_RESULT,input->getTitle());
+	return MariaText::format(MariaText::SEARCH_RESULT,input->getTitle().c_str());
 }
 
 string MariaLogic::runCommandDeleteTask(MariaInputObject* input, MariaStateObject* state) {

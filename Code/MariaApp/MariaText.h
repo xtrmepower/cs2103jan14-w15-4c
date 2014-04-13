@@ -26,6 +26,8 @@ public:
 
 	static const string SEARCH_RESULT;
 
+	static const int BUFFER = 256;
+
 	static string format(string formatString, ... );
 private:
 	MariaText(void);
