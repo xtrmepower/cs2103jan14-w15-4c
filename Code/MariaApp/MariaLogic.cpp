@@ -90,9 +90,9 @@ string MariaLogic::processCommand(std::string inputText) {
 			output = runCommandDeleteTask(input, currentObj);
 		break;
 
-		case MariaInputObject::COMMAND_TYPE::DELETE_ALL:
+		/*case MariaInputObject::COMMAND_TYPE::DELETE_ALL:
 			output = runCommandDeleteAll(input, currentObj);
-		break;
+		break;*/
 
 		case MariaInputObject::COMMAND_TYPE::MARK_DONE:
 			output = runCommandMarkDone(input, currentObj);

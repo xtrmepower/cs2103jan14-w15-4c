@@ -55,7 +55,7 @@ MariaInterpreter::MariaInterpreter(map<string, MariaInputObject::COMMAND_TYPE>* 
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("undone", MariaInputObject::COMMAND_TYPE::MARK_UNDONE));
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("delete", MariaInputObject::COMMAND_TYPE::DELETE_TASK));
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("remove", MariaInputObject::COMMAND_TYPE::DELETE_TASK));
-	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("clear", MariaInputObject::COMMAND_TYPE::DELETE_ALL));
+	//commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("clear", MariaInputObject::COMMAND_TYPE::DELETE_ALL));
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("undo", MariaInputObject::COMMAND_TYPE::UNDO));
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("back", MariaInputObject::COMMAND_TYPE::GO_HOME));
 	commandKeywordList->insert(pair<string, MariaInputObject::COMMAND_TYPE>("home", MariaInputObject::COMMAND_TYPE::GO_HOME));
@@ -687,9 +687,9 @@ void MariaInterpreter::parseDelete(string input, MariaInputObject* inputObject, 
 		if (input.size() == 0) {
 			SAFE_DELETE(inputObject);
 			throw exception(MESSAGE_NO_ACTIVITY_TITLE.c_str());
-		} else if (isStringEqual(input, MODIFIER_ALL_TASKS)) {
+		} /*else if (isStringEqual(input, MODIFIER_ALL_TASKS)) {
 			inputObject->setCommandType(MariaInputObject::COMMAND_TYPE::DELETE_ALL);
-		} else {
+		}*/ else {
 			inputObject->setTitle(input);
 		}
 		break;
