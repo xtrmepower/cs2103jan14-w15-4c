@@ -37,7 +37,7 @@ string MariaLogic::processCommand(std::string inputText) {
 		throw;
 	}
 
-	switch (input->getCommandType()) {
+	switch (input->getCOMMAND_TYPE()) {
 		case MariaInputObject::COMMAND_TYPE::EXIT:
 			runCommandExit(input, currentObj);
 		break;
