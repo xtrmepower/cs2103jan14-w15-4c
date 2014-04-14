@@ -11,7 +11,7 @@ public:
 	MariaUIStateDisplay(QMainWindow* qmainWindow, float taskStartHeight, int maxTaskDisplay);
 	~MariaUIStateDisplay();
 
-	MariaUITask* addUITask(MariaTask *task, MariaUITask::DISPLAY_TYPE type);
+	MariaUITask* addUITask(MariaTask *task, MariaUITask::DisplayType type);
 	void updateUITaskPosition();
 	void updateUITaskNumber();
 	MariaUITask* eraseUITask(int index);

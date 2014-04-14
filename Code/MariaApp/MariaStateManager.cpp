@@ -122,7 +122,7 @@ StateType MariaStateManager::getCurrentState() {
 	return _currentState;
 }
 
-MariaStateManager::STATE_TRANSITION MariaStateManager::getTransition() {
+MariaStateManager::StateTransition MariaStateManager::getTransition() {
 	return _currentTransition;
 }
 

@@ -43,7 +43,7 @@ void MariaUIStateDisplay::updateUITaskNumber() {
 	}
 }
 
-MariaUITask* MariaUIStateDisplay::addUITask(MariaTask *task, MariaUITask::DISPLAY_TYPE type) {
+MariaUITask* MariaUIStateDisplay::addUITask(MariaTask *task, MariaUITask::DisplayType type) {
 	assert(task != NULL);
 
 	int currentPosition = ((int)_taskStack.size()) - _page*_maxTaskDisplay;

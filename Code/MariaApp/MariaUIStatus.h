@@ -7,15 +7,19 @@
 class MariaUIStatus : QWidget {
 	Q_OBJECT
 public:
-	enum STATUS_TYPE {
-		OK, INVALID, WAIT, UNKNOWN, NONE
-	};
+	typedef enum{
+		OK,
+		INVALID,
+		WAIT,
+		UNKNOWN,
+		NONE
+	} StatusType;
 
 	MariaUIStatus(QMainWindow *qmainWindow);
 	~MariaUIStatus();
 
-	void setStatus(STATUS_TYPE type);
-	STATUS_TYPE getStatus();
+	void setStatus(StatusType type);
+	StatusType getStatus();
 	void updateGUI(QPointF statePosition);
 
 protected slots:
@@ -38,7 +42,7 @@ private:
 
 	QMainWindow *_qmainWindow;
 
-	STATUS_TYPE _currentStatus;
+	StatusType _currentStatus;
 	int _statusImageIndex;
 	QPixmap *_imageHandle[AMOUNT_OF_IMAGES];
 	QLabel *_statusIcon;

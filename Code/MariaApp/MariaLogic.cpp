@@ -869,10 +869,10 @@ void MariaLogic::addTaskToUI(MariaTask* toAdd, MariaStateObject* state) {
 		mariaStateManager->queueState(StateType::SHOW, nextState);
 		mariaStateManager->transitState();
 	} else if (mariaStateManager->getCurrentState() == StateType::HOME) {
-		((MariaUIStateHome*)state)->addUITask(toAdd, MariaUITask::DISPLAY_TYPE::NORMAL);
+		((MariaUIStateHome*)state)->addUITask(toAdd, MariaUITask::DisplayType::NORMAL);
 		((MariaUIStateHome*)state)->setPageEnd();
 	} else if (mariaStateManager->getCurrentState() == StateType::SHOW) {
-		((MariaUIStateShow*)state)->addUITask(toAdd, MariaUITask::DISPLAY_TYPE::DETAILED);
+		((MariaUIStateShow*)state)->addUITask(toAdd, MariaUITask::DisplayType::DETAILED);
 		((MariaUIStateShow*)state)->setPageEnd();
 	}
 }
