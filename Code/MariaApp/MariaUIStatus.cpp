@@ -26,7 +26,7 @@ MariaUIStatus::~MariaUIStatus(void) {
 	SAFE_DELETE(_statusIcon);
 }
 
-void MariaUIStatus::setStatus(STATUS_TYPE type) {
+void MariaUIStatus::setStatus(StatusType type) {
 	if(_currentStatus != type) {
 		_currentStatus = type;
 		updateStatusAnimation();
@@ -35,7 +35,7 @@ void MariaUIStatus::setStatus(STATUS_TYPE type) {
 	}
 }
 
-MariaUIStatus::STATUS_TYPE MariaUIStatus::getStatus() {
+MariaUIStatus::StatusType MariaUIStatus::getStatus() {
 	return _currentStatus;
 }
 

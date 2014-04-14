@@ -14,11 +14,11 @@ public:
 		BEGIN, 
 		ACTIVE, 
 		END
-	} STATE_TRANSITION;
+	} StateTransition;
 
 private:
 	StateType _currentState;
-	STATE_TRANSITION _currentTransition;
+	StateTransition _currentTransition;
 	MariaStateObject* _currentStateObject;
 	std::queue<StateType> _stateQueue;
 	std::queue<MariaStateObject*> _stateQueueObject;
@@ -46,7 +46,7 @@ public:
 	void queueState(StateType type, MariaStateObject* stateObject);
 	void transitState();
 	StateType getCurrentState();
-	STATE_TRANSITION getTransition();
+	StateTransition getTransition();
 	void clearQueuedState();
 	MariaStateObject* getCurrentStateObject();
 

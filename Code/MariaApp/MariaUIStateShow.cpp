@@ -38,7 +38,7 @@ void MariaUIStateShow::initBeginState() {
 
 void MariaUIStateShow::initActiveState() {
 	for(MariaTask* temp : _listOfTasks) {
-		addUITask(temp, MariaUITask::DISPLAY_TYPE::DETAILED);
+		addUITask(temp, MariaUITask::DisplayType::DETAILED);
 	}
 
 	updateUITaskPosition();

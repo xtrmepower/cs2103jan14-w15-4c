@@ -17,7 +17,6 @@ const string MariaFileManager::TASK_COMPLETED = "Done";
 const string MariaFileManager::TASK_NOT_COMPLETED = "Not Done";
 
 MariaFileManager::MariaFileManager(void) {
-	
 }
 
 MariaFileManager::~MariaFileManager(void) {

@@ -46,9 +46,9 @@ public:
 		NORMAL, 
 		EXPANDED,
 		DETAILED
-	} DISPLAY_TYPE;
+	} DisplayType;
 
-	MariaUITask(QMainWindow *qmainWindow, MariaTask *task, DISPLAY_TYPE type);
+	MariaUITask(QMainWindow *qmainWindow, MariaTask *task, DisplayType type);
 	~MariaUITask();
 
 	bool setTitlePretext(string pretext);
@@ -80,7 +80,7 @@ protected slots:
 private:
 	QMainWindow * _qmainWindow;
 	MariaTask *_taskReference;
-	DISPLAY_TYPE _currentDisplayType;
+	DisplayType _currentDisplayType;
 	MariaTask::TaskType _taskType;
 	
 	QPointF _destination;
